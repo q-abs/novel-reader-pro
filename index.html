@@ -712,7 +712,20 @@ const STORE_KEY = 'novelReaderPro_v1';
 let state = loadState();
 let importUrls = state.importUrls || [
   'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241122.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411283.json',
   'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241128.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241125.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241121.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411183.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411202.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241120.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411192.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241119.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241118.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241108.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241107.json',
+  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411062.json',
+  'http://www.yckceo1.com/yuedu/shuyuan/json/id/5783.json',
 ];
 let currentBook = null;
 let currentChapter = 0;
@@ -776,6 +789,11 @@ function getState() {
   renderSources();
   renderImportUrls();
   checkDaily();
+  // Auto-import from URL parameter
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('autoimport') === '1') {
+    setTimeout(() => importFromUrls(), 800);
+  }
 })();
 
 // ======= THEME =======
