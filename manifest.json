@@ -1,0 +1,23 @@
+{
+  "name": "小说阅读器 Pro",
+  "short_name": "阅读器",
+  "description": "支持自定义书源的小说阅读器",
+  "start_url": "/novel-reader-pro/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%231a1a2e'/><text x='96' y='130' font-size='100' text-anchor='middle' fill='%23e94560'>📖</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%231a1a2e'/><text x='256' y='340' font-size='280' text-anchor='middle' fill='%23e94560'>📖</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["books", "entertainment"]
+}
