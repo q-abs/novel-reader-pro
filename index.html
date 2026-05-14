@@ -1104,6 +1104,8 @@ async function openBook(book) {
     currentChapter = lastRead?.lastChapter || 0;
     // Add to shelf
     addToShelf(currentBook);
+    // Open reader view
+    openReader(currentBook);
     // Show chapter list
     showChapterList();
     // Load first/continue chapter
@@ -1111,6 +1113,7 @@ async function openBook(book) {
   } catch(e) {
     chapters = [{title: '第1章', url: '', idx: 0}];
     addToShelf(currentBook);
+    openReader(currentBook);
     loadChapter(0);
   }
 }
