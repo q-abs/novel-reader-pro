@@ -710,6 +710,7 @@
 const PROXY = 'https://api.codetabs.com/v1/proxy?quest=';
 const STORE_KEY = 'novelReaderPro_v1';
 let state = loadState();
+let searchResults = [];
 let importUrls = state.importUrls || [
   'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241122.json',
   'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411283.json',
@@ -1001,6 +1002,7 @@ async function searchMultiSource(keyword, sources) {
   }
   searchLoading = false;
   sortResults(results);
+  searchResults = results;
   container.innerHTML = `<div class="result-count">找到 ${results.length} 本书（${sources.length} 个书源）</div>` + renderResults(results);
 }
 
@@ -1065,10 +1067,20 @@ function cleanText(t) {
   return t.replace(/\s+/g, ' ').replace(/[\r\n]+/g, '').trim().slice(0, 200);
 }
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function escapeAttr(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function renderResults(results) {
   if (!results.length) return '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">未找到结果</div><div class="empty-desc">试试不同的关键词，或检查书源是否可用</div></div>';
-  return results.map(b => `
-    <div class="book-card" onclick="openBook(${escapeAttr(JSON.stringify(b))})">
+  return results.map((b, i) => `
+    <div class="book-card" data-index="${i}" onclick="openBookFromSearch(${i})">
       <div class="book-cover">${b.cover ? `<img src="${b.cover}" onerror="this.parentElement.textContent='📖'">` : '📖'}</div>
       <div class="book-info">
         <div class="book-title">${escapeHtml(b.title)}</div>
@@ -1084,6 +1096,11 @@ function sortResults(results) {
   if (currentSort === 'speed') results.sort((a, b) => (a._elapsed || 9999) - (b._elapsed || 9999));
   else if (currentSort === 'name') results.sort((a, b) => a.title.localeCompare(b.title, 'zh'));
   else if (currentSort === 'completeness') results.sort((a, b) => (b.intro?.length || 0) - (a.intro?.length || 0));
+}
+
+function openBookFromSearch(index) {
+  const book = searchResults[index];
+  if (book) openBook(book);
 }
 
 // ======= OPEN BOOK =======
