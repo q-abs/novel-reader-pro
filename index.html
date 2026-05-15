@@ -1042,7 +1042,20 @@ function parseSearchResults(src, html, keyword, baseUrl) {
       const cover = item.querySelector('img')?.src || '';
       const intro = (item.querySelector('.desc,.intro')?.textContent || '').trim();
       let href = item.getAttribute('href') || '';
-      if (href && !href.startsWith('http')) href = new URL(href, baseUrl || '').href;
+      if (href && !href.startsWith('http') && !href.startsWith('//')) {
+        try {
+          const u = new URL(baseUrl);
+          // Compute directory base: origin + pathname up to last '/'
+          let baseDir = u.origin + '/';
+          if (u.pathname.includes('/')) {
+            const lastSlash = u.pathname.lastIndexOf('/');
+            if (lastSlash > 0) baseDir = u.origin + u.pathname.substring(0, lastSlash + 1);
+          }
+          href = new URL(href, baseDir).href;
+        } catch(e) {
+          if (baseUrl) href = baseUrl + href;
+        }
+      }
       results.push({
         id: href,
         title: cleanText(name),
@@ -1106,11 +1119,15 @@ function openBookFromSearch(index) {
 // ======= OPEN BOOK =======
 async function openBook(book) {
   currentBook = {...book, id: book.id || ('local_' + Date.now())};
-  toast('正在加载目录...');
+  const displayUrl = (book.id || '').substring(0, 120);
+  toast('正在加载: ' + displayUrl);
   try {
     const src = state.sources.find(s => s._id === book.sourceId);
     const url = book.id;
-    const html = url ? await fetchTextWithProxy(url) : null;
+    if (!url) { toast('错误：书籍 URL 为空'); return; }
+    const html = await fetchTextWithProxy(url);
+    if (!html) { toast('获取失败，无内容。'); console.log('openBook: no HTML from', url); chapters = []; return; }
+    console.log('openBook: fetched', html.length, 'bytes from', url);
     chapters = parseChapters(src, html, book);
     if (chapters.length === 0) {
       // Create mock chapters
@@ -1128,6 +1145,8 @@ async function openBook(book) {
     // Load first/continue chapter
     loadChapter(currentChapter);
   } catch(e) {
+    console.error('openBook error:', e);
+    toast('加载出错: ' + (e.message || e));
     chapters = [{title: '第1章', url: '', idx: 0}];
     addToShelf(currentBook);
     openReader(currentBook);
