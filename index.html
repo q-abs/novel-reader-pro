@@ -987,7 +987,7 @@ async function searchMultiSource(keyword, sources) {
       const html = await fetchTextWithProxy(searchUrl);
       if (!html || controller.signal.aborted) return;
       const elapsed = Date.now() - startTime;
-      const found = parseSearchResults(src, html, keyword);
+      const found = parseSearchResults(src, html, keyword, searchUrl);
       return { src, found, elapsed };
     } catch(e) { return null; }
   });
@@ -1015,7 +1015,7 @@ function buildSearchUrl(src, keyword) {
   return url;
 }
 
-function parseSearchResults(src, html, keyword) {
+function parseSearchResults(src, html, keyword, baseUrl) {
   try {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -1042,7 +1042,7 @@ function parseSearchResults(src, html, keyword) {
       const cover = item.querySelector('img')?.src || '';
       const intro = (item.querySelector('.desc,.intro')?.textContent || '').trim();
       let href = item.getAttribute('href') || '';
-      if (href && !href.startsWith('http')) href = new URL(href, window.location.href).href;
+      if (href && !href.startsWith('http')) href = new URL(href, baseUrl || '').href;
       results.push({
         id: href,
         title: cleanText(name),
@@ -1149,7 +1149,19 @@ function parseChapters(src, html, book) {
       if (selector) items = doc.querySelectorAll(selector);
     }
     if (!items.length) {
-      items = doc.querySelectorAll('a[href*="chapter"], a[href*="read"], a[href*="/content/"], a[href*="/txt/"]');
+      // Smarter fallback: find container with most <a> tags
+      const containers = doc.querySelectorAll('div, ul, ol, section, main, article');
+      let bestContainer = null, maxLinks = 0;
+      containers.forEach(c => {
+        const links = c.querySelectorAll('a[href]');
+        if (links.length > maxLinks) { maxLinks = links.length; bestContainer = c; }
+      });
+      if (bestContainer && maxLinks > 3) {
+        items = bestContainer.querySelectorAll('a[href]');
+      } else {
+        // Broad fallback: any link that looks like a chapter
+        items = doc.querySelectorAll('a[href*="chapter"], a[href*="read"], a[href*="/content/"], a[href*="/txt/"], a[href*=".html"], a[href*=".htm"]');
+      }
     }
     const chapters = [];
     let idx = 0;
@@ -1168,10 +1180,27 @@ function parseChapters(src, html, book) {
 }
 
 function extractCssSelector(rule) {
-  // Extract CSS selector from rule string like "@css:.book-list li"
   if (!rule) return null;
-  const m = rule.match(/@css:(.+?)(?:@|$)/);
-  return m ? m[1].trim() : rule.trim();
+  // @css:selector
+  const cssMatch = rule.match(/@css:(.+?)(?:@|$)/);
+  if (cssMatch) return cssMatch[1].trim();
+  // class.xxx or class.xxx@tag.yyy
+  if (rule.startsWith('class.')) {
+    let r = rule.replace('class.', '.');
+    const tagParts = r.match(/@tag\.([a-z]+)/g);
+    if (tagParts) {
+      r = r.split('@')[0];
+      tagParts.forEach(p => { r += ' ' + p.replace('@tag.', ''); });
+    }
+    return r.trim();
+  }
+  // id.xxx
+  if (rule.startsWith('id.')) return '#' + rule.slice(3);
+  // tag.xxx
+  if (rule.startsWith('tag.')) return rule.slice(4);
+  // Strip Legado inner rules, keep CSS-like part
+  const stripped = rule.replace(/@[a-zA-Z]+\.[^@]*/g, '').trim();
+  return stripped || null;
 }
 
 // ======= READER =======
