@@ -1271,27 +1271,54 @@ function loadChapter(idx) {
 }
 
 async function fetchChapterContent(url, idx) {
- const html = await fetchTextWithProxy(url);
+ const raw = await fetchTextWithProxy(url);
+ // Handle error object from proxy
+ if (!raw || (typeof raw === 'object' && raw.error)) {
+ const msg = (raw && typeof raw === 'object' && raw.message) ? raw.message : '内容获取失败';
+ return `<div style="padding:40px;text-align:center;color:var(--accent)"><p>${msg}</p><p style="font-size:12px;color:var(--text-secondary);margin-top:10px">请尝试其他书源</p></div>`;
+ }
+ const html = raw;
  if (!html) throw new Error('No content');
  const parser = new DOMParser();
  const doc = parser.parseFromString(html, 'text/html');
+ // Remove script and style tags to avoid garbage in fallback
+ doc.querySelectorAll('script, style, noscript, iframe').forEach(el => el.remove());
  // Try common content selectors
- const selectors = ['#content,.content,.novel-content,.read-content', '.article-content', '.chapter-content', '#chapter-content', '.text-content'];
+ const selectors = ['#content,#txt,.content,.novel-content,.read-content,.article-content,.chapter-content,#chapter-content,.text-content,#txtContent,#book_text,.book-content','div[id*=content],div[class*=content]'];
  for (const sel of selectors) {
- const el = doc.querySelector(sel);
- if (el) {
+ const els = doc.querySelectorAll(sel);
+ for (const el of els) {
  let text = el.innerHTML;
+ if (!text || text.length < 20) continue;
  // Clean HTML tags but preserve paragraphs
  text = text.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n');
  text = text.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n));
- text = text.split('\n').map(l => l.trim()).filter(l => l.length > 0).join('<br><br>');
- return text || '<p style="color:var(--text-secondary)">内容为空</p>';
+ text = text.split('\n').map(l => l.trim()).filter(l => l.length > 1).join('<br><br>');
+ if (text.length > 30) return text;
  }
  }
- // Fallback: body text
+ // Smarter fallback: find the largest text block
+ let bestEl = null, bestLen = 0;
+ doc.querySelectorAll('div, article, section, main, td').forEach(el => {
+ const t = (el.innerText || '').trim();
+ if (t.length > bestLen && t.length > 100) { bestLen = t.length; bestEl = el; }
+ });
+ if (bestEl) {
+ let text = bestEl.innerHTML;
+ text = text.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n');
+ text = text.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n));
+ text = text.split('\n').map(l => l.trim()).filter(l => l.length > 1).join('<br><br>');
+ if (text.length > 30) return text;
+ }
+ // Last resort: body text (scripts already removed)
  let text = doc.body.innerText || doc.body.textContent || '';
  text = text.replace(/\s+/g, ' ').trim();
- return text ? `<p>${text.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>` : '<p style="color:var(--text-secondary)">无法解析内容</p>';
+ // Remove common garbage patterns
+ text = text.replace(/setTimeout\s*\([^)]*\)/g, '');
+ text = text.replace(/var\s+\w+\s*=/g, '');
+ text = text.replace(/document\.[a-zA-Z]+/g, '');
+ text = text.replace(/\s+/g, ' ').trim();
+ return text ? `<p>${text.substring(0, 5000)}</p>` : '<p style="color:var(--text-secondary)">无法解析内容</p>';
 }
 
 function prevChapter() { loadChapter(currentChapter - 1); }
