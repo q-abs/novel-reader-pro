@@ -941,13 +941,21 @@ async function fetchTextWithProxy(url) {
  const bytes = new Uint8Array(await res.arrayBuffer());
  // Try UTF-8 first
  const text = new TextDecoder('utf-8').decode(bytes);
+ // Check if proxy returned an error message
+ if (text.includes('"Error"') || text.includes('not a valid resource') || text.includes('is not valid')) {
+ console.error('CORS proxy error for', url, ':', text.substring(0, 200));
+ return { error: 'CORS_PROXY_BLOCKED', message: '该网站被代理阻止，请尝试其他书源', original: text };
+ }
  if (looksLikeGarbled(text)) {
  const gbText = new TextDecoder('gbk').decode(bytes);
  if (!looksLikeGarbled(gbText)) return gbText;
  return new TextDecoder('big5').decode(bytes);
  }
  return text;
- } catch(e) { return null; }
+ } catch(e) { 
+ console.error('fetchTextWithProxy error:', e);
+ return { error: 'FETCH_FAILED', message: '网络请求失败: ' + (e.message || '未知错误') };
+ }
 }
 
 // ======= SEARCH =======
@@ -1132,6 +1140,18 @@ async function openBook(book) {
  if (!url) { toast('错误：书籍 URL 为空'); return; }
  const html = await fetchTextWithProxy(url);
  if (!html) { toast('获取失败，无内容。'); console.log('openBook: no HTML from', url); chapters = []; return; }
+ // Handle error object from fetchTextWithProxy
+ if (html && html.error) {
+ toast(html.message || '加载失败');
+ console.error('openBook: fetch error', html);
+ // Still open reader with mock chapter so user can see something
+ chapters = [{title: '第1章', url: url || '', idx: 0}];
+ addToShelf(currentBook);
+ openReader(currentBook);
+ showChapterList();
+ loadChapter(0);
+ return;
+ }
  console.log('openBook: fetched', html.length, 'bytes from', url);
  chapters = parseChapters(src, html, book);
  if (chapters.length === 0) {
