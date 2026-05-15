@@ -1045,7 +1045,7 @@ function parseSearchResults(src, html, keyword, baseUrl) {
 let href = linkEl ? linkEl.getAttribute('href') : '';
 if (!href) {
  results.push({ title: '⚠ 无链接: ' + (item.className || item.tagName), id: 'javascript:void(0)', sourceId: src._id, sourceName: src.bookSourceName || src.sourceName || '未知书源' });
- continue;
+ return;
 }
  if (href && !href.startsWith('http') && !href.startsWith('//')) {
  try {
