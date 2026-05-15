@@ -1,702 +1,702 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="小说阅读器">
-  <meta name="theme-color" content="#1a1a2e">
-  <title>小说阅读器 Pro</title>
-  <link rel="manifest" href="manifest.json">
-  <style>
-    :root {
-      --bg-primary: #1a1a2e;
-      --bg-secondary: #16213e;
-      --bg-card: #0f3460;
-      --text-primary: #e8e8e8;
-      --text-secondary: #a0a0a0;
-      --accent: #e94560;
-      --accent2: #0f3460;
-      --border: #2a2a4a;
-      --success: #4caf50;
-      --warning: #ff9800;
-      --font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --safe-top: env(safe-area-inset-top, 0px);
-      --nav-height: 56px;
-      --tab-height: calc(60px + var(--safe-bottom));
-    }
-    [data-theme="light"] {
-      --bg-primary: #f5f5f0;
-      --bg-secondary: #ffffff;
-      --bg-card: #ffffff;
-      --text-primary: #1a1a1a;
-      --text-secondary: #666666;
-      --accent: #e94560;
-      --border: #e0e0e0;
-    }
-    [data-theme="sepia"] {
-      --bg-primary: #f4ecd8;
-      --bg-secondary: #f9f3e3;
-      --bg-card: #fff8e7;
-      --text-primary: #5b4636;
-      --text-secondary: #8b7355;
-      --accent: #c17f3a;
-      --border: #d4c5a9;
-    }
-    [data-theme="dark"] {
-      --bg-primary: #0d0d0d;
-      --bg-secondary: #1a1a1a;
-      --bg-card: #252525;
-      --text-primary: #d0d0d0;
-      --text-secondary: #888888;
-      --accent: #e94560;
-      --border: #333333;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; overflow: hidden; }
-    body {
-      font-family: var(--font-family);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      transition: background 0.3s, color 0.3s;
-    }
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+ <meta name="apple-mobile-web-app-title" content="小说阅读器">
+ <meta name="theme-color" content="#1a1a2e">
+ <title>小说阅读器 Pro</title>
+ <link rel="manifest" href="manifest.json">
+ <style>
+ :root {
+ --bg-primary: #1a1a2e;
+ --bg-secondary: #16213e;
+ --bg-card: #0f3460;
+ --text-primary: #e8e8e8;
+ --text-secondary: #a0a0a0;
+ --accent: #e94560;
+ --accent2: #0f3460;
+ --border: #2a2a4a;
+ --success: #4caf50;
+ --warning: #ff9800;
+ --font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+ --safe-bottom: env(safe-area-inset-bottom, 0px);
+ --safe-top: env(safe-area-inset-top, 0px);
+ --nav-height: 56px;
+ --tab-height: calc(60px + var(--safe-bottom));
+ }
+ [data-theme="light"] {
+ --bg-primary: #f5f5f0;
+ --bg-secondary: #ffffff;
+ --bg-card: #ffffff;
+ --text-primary: #1a1a1a;
+ --text-secondary: #666666;
+ --accent: #e94560;
+ --border: #e0e0e0;
+ }
+ [data-theme="sepia"] {
+ --bg-primary: #f4ecd8;
+ --bg-secondary: #f9f3e3;
+ --bg-card: #fff8e7;
+ --text-primary: #5b4636;
+ --text-secondary: #8b7355;
+ --accent: #c17f3a;
+ --border: #d4c5a9;
+ }
+ [data-theme="dark"] {
+ --bg-primary: #0d0d0d;
+ --bg-secondary: #1a1a1a;
+ --bg-card: #252525;
+ --text-primary: #d0d0d0;
+ --text-secondary: #888888;
+ --accent: #e94560;
+ --border: #333333;
+ }
+ * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+ html, body { height: 100%; overflow: hidden; }
+ body {
+ font-family: var(--font-family);
+ background: var(--bg-primary);
+ color: var(--text-primary);
+ transition: background 0.3s, color 0.3s;
+ }
 
-    /* APP SHELL */
-    #app { display: flex; flex-direction: column; height: 100%; }
-    .view { display: none; flex-direction: column; height: calc(100% - var(--tab-height)); overflow: hidden; }
-    .view.active { display: flex; }
+ /* APP SHELL */
+ #app { display: flex; flex-direction: column; height: 100%; }
+ .view { display: none; flex-direction: column; height: calc(100% - var(--tab-height)); overflow: hidden; }
+ .view.active { display: flex; }
 
-    /* STATUS BAR */
-    .status-bar {
-      height: var(--safe-top);
-      background: var(--bg-primary);
-      flex-shrink: 0;
-    }
+ /* STATUS BAR */
+ .status-bar {
+ height: var(--safe-top);
+ background: var(--bg-primary);
+ flex-shrink: 0;
+ }
 
-    /* TOP BAR */
-    .top-bar {
-      height: var(--nav-height);
-      background: var(--bg-primary);
-      display: flex; align-items: center;
-      padding: 0 12px;
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      gap: 8px;
-    }
-    .top-bar h1 { font-size: 17px; font-weight: 600; flex: 1; text-align: center; }
-    .top-bar .icon-btn {
-      width: 36px; height: 36px;
-      border: none; background: none;
-      color: var(--text-primary);
-      font-size: 20px; cursor: pointer;
-      border-radius: 8px; display: flex;
-      align-items: center; justify-content: center;
-    }
-    .top-bar .icon-btn:active { background: var(--border); }
+ /* TOP BAR */
+ .top-bar {
+ height: var(--nav-height);
+ background: var(--bg-primary);
+ display: flex; align-items: center;
+ padding: 0 12px;
+ border-bottom: 1px solid var(--border);
+ flex-shrink: 0;
+ gap: 8px;
+ }
+ .top-bar h1 { font-size: 17px; font-weight: 600; flex: 1; text-align: center; }
+ .top-bar .icon-btn {
+ width: 36px; height: 36px;
+ border: none; background: none;
+ color: var(--text-primary);
+ font-size: 20px; cursor: pointer;
+ border-radius: 8px; display: flex;
+ align-items: center; justify-content: center;
+ }
+ .top-bar .icon-btn:active { background: var(--border); }
 
-    /* SCROLL AREA */
-    .scroll-area {
-      flex: 1; overflow-y: auto; overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      padding: 12px;
-    }
-    .scroll-area::-webkit-scrollbar { width: 0; }
+ /* SCROLL AREA */
+ .scroll-area {
+ flex: 1; overflow-y: auto; overflow-x: hidden;
+ -webkit-overflow-scrolling: touch;
+ padding: 12px;
+ }
+ .scroll-area::-webkit-scrollbar { width: 0; }
 
-    /* BOTTOM TAB BAR */
-    .tab-bar {
-      display: flex;
-      background: var(--bg-secondary);
-      border-top: 1px solid var(--border);
-      height: var(--tab-height);
-      flex-shrink: 0;
-      padding-bottom: var(--safe-bottom);
-    }
-    .tab-item {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 2px; cursor: pointer;
-      color: var(--text-secondary);
-      font-size: 10px; border: none; background: none;
-      transition: color 0.2s;
-    }
-    .tab-item.active { color: var(--accent); }
-    .tab-item svg { width: 22px; height: 22px; }
+ /* BOTTOM TAB BAR */
+ .tab-bar {
+ display: flex;
+ background: var(--bg-secondary);
+ border-top: 1px solid var(--border);
+ height: var(--tab-height);
+ flex-shrink: 0;
+ padding-bottom: var(--safe-bottom);
+ }
+ .tab-item {
+ flex: 1; display: flex; flex-direction: column;
+ align-items: center; justify-content: center;
+ gap: 2px; cursor: pointer;
+ color: var(--text-secondary);
+ font-size: 10px; border: none; background: none;
+ transition: color 0.2s;
+ }
+ .tab-item.active { color: var(--accent); }
+ .tab-item svg { width: 22px; height: 22px; }
 
-    /* SEARCH BAR */
-    .search-bar {
-      display: flex; gap: 8px; padding: 8px 0 12px;
-    }
-    .search-bar input {
-      flex: 1; height: 40px; border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-primary);
-      padding: 0 16px; font-size: 15px;
-      outline: none;
-    }
-    .search-bar input:focus { border-color: var(--accent); }
-    .search-bar button {
-      height: 40px; padding: 0 16px;
-      border-radius: 20px; border: none;
-      background: var(--accent); color: #fff;
-      font-size: 14px; cursor: pointer;
-      white-space: nowrap;
-    }
+ /* SEARCH BAR */
+ .search-bar {
+ display: flex; gap: 8px; padding: 8px 0 12px;
+ }
+ .search-bar input {
+ flex: 1; height: 40px; border-radius: 20px;
+ border: 1px solid var(--border);
+ background: var(--bg-card);
+ color: var(--text-primary);
+ padding: 0 16px; font-size: 15px;
+ outline: none;
+ }
+ .search-bar input:focus { border-color: var(--accent); }
+ .search-bar button {
+ height: 40px; padding: 0 16px;
+ border-radius: 20px; border: none;
+ background: var(--accent); color: #fff;
+ font-size: 14px; cursor: pointer;
+ white-space: nowrap;
+ }
 
-    /* CARDS */
-    .book-card {
-      display: flex; gap: 12px; padding: 12px;
-      background: var(--bg-card);
-      border-radius: 12px; margin-bottom: 10px;
-      cursor: pointer; border: 1px solid var(--border);
-      transition: transform 0.15s;
-    }
-    .book-card:active { transform: scale(0.98); }
-    .book-cover {
-      width: 60px; height: 80px;
-      border-radius: 6px;
-      background: var(--accent2);
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 24px; overflow: hidden;
-    }
-    .book-cover img { width: 100%; height: 100%; object-fit: cover; }
-    .book-info { flex: 1; min-width: 0; }
-    .book-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .book-author { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
-    .book-intro { font-size: 12px; color: var(--text-secondary); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.5; }
-    .book-meta { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
-    .source-tag {
-      display: inline-block; font-size: 10px;
-      background: var(--accent); color: #fff;
-      padding: 1px 6px; border-radius: 4px; margin-right: 4px;
-    }
+ /* CARDS */
+ .book-card {
+ display: flex; gap: 12px; padding: 12px;
+ background: var(--bg-card);
+ border-radius: 12px; margin-bottom: 10px;
+ cursor: pointer; border: 1px solid var(--border);
+ transition: transform 0.15s;
+ }
+ .book-card:active { transform: scale(0.98); }
+ .book-cover {
+ width: 60px; height: 80px;
+ border-radius: 6px;
+ background: var(--accent2);
+ flex-shrink: 0;
+ display: flex; align-items: center; justify-content: center;
+ color: #fff; font-size: 24px; overflow: hidden;
+ }
+ .book-cover img { width: 100%; height: 100%; object-fit: cover; }
+ .book-info { flex: 1; min-width: 0; }
+ .book-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+ .book-author { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+ .book-intro { font-size: 12px; color: var(--text-secondary); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.5; }
+ .book-meta { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+ .source-tag {
+ display: inline-block; font-size: 10px;
+ background: var(--accent); color: #fff;
+ padding: 1px 6px; border-radius: 4px; margin-right: 4px;
+ }
 
-    /* PROGRESS BAR */
-    .progress-bar {
-      height: 3px; background: var(--border);
-      border-radius: 2px; margin-top: 6px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: var(--accent);
-      border-radius: 2px; transition: width 0.3s;
-    }
+ /* PROGRESS BAR */
+ .progress-bar {
+ height: 3px; background: var(--border);
+ border-radius: 2px; margin-top: 6px; overflow: hidden;
+ }
+ .progress-fill {
+ height: 100%; background: var(--accent);
+ border-radius: 2px; transition: width 0.3s;
+ }
 
-    /* SHELF GRID */
-    .shelf-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .shelf-item {
-      display: flex; flex-direction: column;
-      align-items: center; cursor: pointer;
-      padding: 8px;
-    }
-    .shelf-cover {
-      width: 100%; aspect-ratio: 3/4;
-      border-radius: 8px; overflow: hidden;
-      background: var(--accent2);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 28px; margin-bottom: 6px;
-      position: relative;
-    }
-    .shelf-cover img { width: 100%; height: 100%; object-fit: cover; }
-    .shelf-title { font-size: 12px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
-    .shelf-badge {
-      position: absolute; top: 4px; right: 4px;
-      background: var(--accent); color: #fff;
-      font-size: 10px; padding: 1px 5px; border-radius: 4px;
-    }
+ /* SHELF GRID */
+ .shelf-grid {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 12px;
+ }
+ .shelf-item {
+ display: flex; flex-direction: column;
+ align-items: center; cursor: pointer;
+ padding: 8px;
+ }
+ .shelf-cover {
+ width: 100%; aspect-ratio: 3/4;
+ border-radius: 8px; overflow: hidden;
+ background: var(--accent2);
+ display: flex; align-items: center; justify-content: center;
+ color: #fff; font-size: 28px; margin-bottom: 6px;
+ position: relative;
+ }
+ .shelf-cover img { width: 100%; height: 100%; object-fit: cover; }
+ .shelf-title { font-size: 12px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+ .shelf-badge {
+ position: absolute; top: 4px; right: 4px;
+ background: var(--accent); color: #fff;
+ font-size: 10px; padding: 1px 5px; border-radius: 4px;
+ }
 
-    /* LOADING */
-    .loading { text-align: center; padding: 40px; color: var(--text-secondary); font-size: 14px; }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 12px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+ /* LOADING */
+ .loading { text-align: center; padding: 40px; color: var(--text-secondary); font-size: 14px; }
+ .spinner {
+ width: 36px; height: 36px;
+ border: 3px solid var(--border);
+ border-top-color: var(--accent);
+ border-radius: 50%;
+ animation: spin 0.8s linear infinite;
+ margin: 0 auto 12px;
+ }
+ @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* MODAL */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 1000; display: none;
-      align-items: flex-end; justify-content: center;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal {
-      background: var(--bg-secondary);
-      border-radius: 16px 16px 0 0;
-      width: 100%; max-width: 500px;
-      max-height: 80vh;
-      overflow-y: auto;
-      padding: 20px;
-      transform: translateY(100%);
-      transition: transform 0.3s;
-    }
-    .modal-overlay.active .modal { transform: translateY(0); }
-    .modal-handle {
-      width: 36px; height: 4px;
-      background: var(--border); border-radius: 2px;
-      margin: 0 auto 16px;
-    }
-    .modal-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
-    .modal-close {
-      float: right; font-size: 24px;
-      background: none; border: none;
-      color: var(--text-secondary); cursor: pointer;
-    }
+ /* MODAL */
+ .modal-overlay {
+ position: fixed; inset: 0;
+ background: rgba(0,0,0,0.6);
+ z-index: 1000; display: none;
+ align-items: flex-end; justify-content: center;
+ }
+ .modal-overlay.active { display: flex; }
+ .modal {
+ background: var(--bg-secondary);
+ border-radius: 16px 16px 0 0;
+ width: 100%; max-width: 500px;
+ max-height: 80vh;
+ overflow-y: auto;
+ padding: 20px;
+ transform: translateY(100%);
+ transition: transform 0.3s;
+ }
+ .modal-overlay.active .modal { transform: translateY(0); }
+ .modal-handle {
+ width: 36px; height: 4px;
+ background: var(--border); border-radius: 2px;
+ margin: 0 auto 16px;
+ }
+ .modal-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+ .modal-close {
+ float: right; font-size: 24px;
+ background: none; border: none;
+ color: var(--text-secondary); cursor: pointer;
+ }
 
-    /* SETTINGS LIST */
-    .setting-item {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 15px;
-    }
-    .setting-item:last-child { border-bottom: none; }
-    .toggle {
-      width: 44px; height: 26px;
-      background: var(--border); border-radius: 13px;
-      position: relative; cursor: pointer;
-      border: none; transition: background 0.3s;
-    }
-    .toggle.active { background: var(--accent); }
-    .toggle::after {
-      content: ''; position: absolute;
-      width: 22px; height: 22px; background: #fff;
-      border-radius: 50%; top: 2px; left: 2px;
-      transition: transform 0.3s;
-    }
-    .toggle.active::after { transform: translateX(18px); }
+ /* SETTINGS LIST */
+ .setting-item {
+ display: flex; align-items: center;
+ justify-content: space-between;
+ padding: 14px 0;
+ border-bottom: 1px solid var(--border);
+ font-size: 15px;
+ }
+ .setting-item:last-child { border-bottom: none; }
+ .toggle {
+ width: 44px; height: 26px;
+ background: var(--border); border-radius: 13px;
+ position: relative; cursor: pointer;
+ border: none; transition: background 0.3s;
+ }
+ .toggle.active { background: var(--accent); }
+ .toggle::after {
+ content: ''; position: absolute;
+ width: 22px; height: 22px; background: #fff;
+ border-radius: 50%; top: 2px; left: 2px;
+ transition: transform 0.3s;
+ }
+ .toggle.active::after { transform: translateX(18px); }
 
-    /* SLIDER */
-    input[type=range] {
-      -webkit-appearance: none;
-      width: 160px; height: 4px;
-      background: var(--border); border-radius: 2px; outline: none;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 22px; height: 22px;
-      background: var(--accent); border-radius: 50%; cursor: pointer;
-    }
+ /* SLIDER */
+ input[type=range] {
+ -webkit-appearance: none;
+ width: 160px; height: 4px;
+ background: var(--border); border-radius: 2px; outline: none;
+ }
+ input[type=range]::-webkit-slider-thumb {
+ -webkit-appearance: none;
+ width: 22px; height: 22px;
+ background: var(--accent); border-radius: 50%; cursor: pointer;
+ }
 
-    /* STATS PAGE */
-    .stats-card {
-      background: var(--bg-card);
-      border-radius: 12px; padding: 16px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border);
-    }
-    .stats-num {
-      font-size: 32px; font-weight: 700;
-      color: var(--accent); margin-bottom: 4px;
-    }
-    .stats-label { font-size: 13px; color: var(--text-secondary); }
-    .stats-row { display: flex; gap: 12px; }
-    .stats-row .stats-card { flex: 1; }
+ /* STATS PAGE */
+ .stats-card {
+ background: var(--bg-card);
+ border-radius: 12px; padding: 16px;
+ margin-bottom: 12px;
+ border: 1px solid var(--border);
+ }
+ .stats-num {
+ font-size: 32px; font-weight: 700;
+ color: var(--accent); margin-bottom: 4px;
+ }
+ .stats-label { font-size: 13px; color: var(--text-secondary); }
+ .stats-row { display: flex; gap: 12px; }
+ .stats-row .stats-card { flex: 1; }
 
-    /* CHAPTER LIST */
-    .chapter-item {
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px; cursor: pointer;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .chapter-item:active { color: var(--accent); }
-    .chapter-item.read { color: var(--text-secondary); }
-    .chapter-item.current { color: var(--accent); font-weight: 600; }
+ /* CHAPTER LIST */
+ .chapter-item {
+ padding: 14px 0;
+ border-bottom: 1px solid var(--border);
+ font-size: 14px; cursor: pointer;
+ display: flex; justify-content: space-between; align-items: center;
+ }
+ .chapter-item:active { color: var(--accent); }
+ .chapter-item.read { color: var(--text-secondary); }
+ .chapter-item.current { color: var(--accent); font-weight: 600; }
 
-    /* READER */
-    #reader-view {
-      background: var(--bg-primary);
-      position: fixed; inset: 0;
-      z-index: 2000; display: none;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    #reader-view.active { display: flex; }
-    .reader-header {
-      background: var(--bg-secondary);
-      padding: calc(var(--safe-top) + 8px) 12px 8px;
-      display: flex; align-items: center; gap: 8px;
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .reader-content {
-      flex: 1; overflow-y: auto;
-      padding: 20px 16px;
-      line-height: 1.8; font-size: 16px;
-      -webkit-overflow-scrolling: touch;
-    }
-    .reader-content::-webkit-scrollbar { width: 0; }
-    .reader-toolbar {
-      background: var(--bg-secondary);
-      padding: 8px 12px calc(8px + var(--safe-bottom));
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .toolbar-row {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-bottom: 8px;
-      font-size: 12px; color: var(--text-secondary);
-    }
-    .toolbar-row:last-child { margin-bottom: 0; }
-    .toolbar-btn {
-      background: none; border: none;
-      color: var(--text-secondary); font-size: 12px;
-      cursor: pointer; padding: 4px 8px;
-    }
-    .toolbar-btn.active { color: var(--accent); }
+ /* READER */
+ #reader-view {
+ background: var(--bg-primary);
+ position: fixed; inset: 0;
+ z-index: 2000; display: none;
+ flex-direction: column;
+ overflow: hidden;
+ }
+ #reader-view.active { display: flex; }
+ .reader-header {
+ background: var(--bg-secondary);
+ padding: calc(var(--safe-top) + 8px) 12px 8px;
+ display: flex; align-items: center; gap: 8px;
+ border-bottom: 1px solid var(--border);
+ flex-shrink: 0;
+ }
+ .reader-content {
+ flex: 1; overflow-y: auto;
+ padding: 20px 16px;
+ line-height: 1.8; font-size: 16px;
+ -webkit-overflow-scrolling: touch;
+ }
+ .reader-content::-webkit-scrollbar { width: 0; }
+ .reader-toolbar {
+ background: var(--bg-secondary);
+ padding: 8px 12px calc(8px + var(--safe-bottom));
+ border-top: 1px solid var(--border);
+ flex-shrink: 0;
+ }
+ .toolbar-row {
+ display: flex; align-items: center;
+ justify-content: space-between; margin-bottom: 8px;
+ font-size: 12px; color: var(--text-secondary);
+ }
+ .toolbar-row:last-child { margin-bottom: 0; }
+ .toolbar-btn {
+ background: none; border: none;
+ color: var(--text-secondary); font-size: 12px;
+ cursor: pointer; padding: 4px 8px;
+ }
+ .toolbar-btn.active { color: var(--accent); }
 
-    /* READER SETTINGS PANEL */
-    .reader-settings {
-      background: var(--bg-secondary);
-      padding: 16px;
-      border-top: 1px solid var(--border);
-      display: none;
-    }
-    .reader-settings.show { display: block; }
-    .setting-row { margin-bottom: 16px; }
-    .setting-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
-    .font-options { display: flex; gap: 8px; flex-wrap: wrap; }
-    .font-opt {
-      padding: 6px 12px; border-radius: 6px;
-      border: 1px solid var(--border);
-      background: none; color: var(--text-primary);
-      font-size: 13px; cursor: pointer;
-    }
-    .font-opt.active { border-color: var(--accent); color: var(--accent); background: rgba(233,69,96,0.1); }
-    .bg-options { display: flex; gap: 8px; }
-    .bg-opt {
-      width: 36px; height: 36px; border-radius: 50%;
-      border: 3px solid transparent; cursor: pointer;
-    }
-    .bg-opt.active { border-color: var(--accent); }
+ /* READER SETTINGS PANEL */
+ .reader-settings {
+ background: var(--bg-secondary);
+ padding: 16px;
+ border-top: 1px solid var(--border);
+ display: none;
+ }
+ .reader-settings.show { display: block; }
+ .setting-row { margin-bottom: 16px; }
+ .setting-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+ .font-options { display: flex; gap: 8px; flex-wrap: wrap; }
+ .font-opt {
+ padding: 6px 12px; border-radius: 6px;
+ border: 1px solid var(--border);
+ background: none; color: var(--text-primary);
+ font-size: 13px; cursor: pointer;
+ }
+ .font-opt.active { border-color: var(--accent); color: var(--accent); background: rgba(233,69,96,0.1); }
+ .bg-options { display: flex; gap: 8px; }
+ .bg-opt {
+ width: 36px; height: 36px; border-radius: 50%;
+ border: 3px solid transparent; cursor: pointer;
+ }
+ .bg-opt.active { border-color: var(--accent); }
 
-    /* IMPORT MODAL */
-    .import-url-list { margin-top: 12px; }
-    .import-url-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px; background: var(--bg-card);
-      border-radius: 8px; margin-bottom: 6px;
-    }
-    .import-url-item input { flex: 1; border: none; background: none; color: var(--text-primary); font-size: 12px; }
-    .import-url-item .del-btn { color: var(--accent); background: none; border: none; cursor: pointer; font-size: 16px; }
+ /* IMPORT MODAL */
+ .import-url-list { margin-top: 12px; }
+ .import-url-item {
+ display: flex; align-items: center; gap: 8px;
+ padding: 8px; background: var(--bg-card);
+ border-radius: 8px; margin-bottom: 6px;
+ }
+ .import-url-item input { flex: 1; border: none; background: none; color: var(--text-primary); font-size: 12px; }
+ .import-url-item .del-btn { color: var(--accent); background: none; border: none; cursor: pointer; font-size: 16px; }
 
-    /* TABS (in modal) */
-    .tab-switch {
-      display: flex; background: var(--bg-card);
-      border-radius: 8px; padding: 3px; margin-bottom: 16px;
-    }
-    .tab-switch button {
-      flex: 1; padding: 8px; border: none;
-      background: none; border-radius: 6px;
-      font-size: 13px; cursor: pointer;
-      color: var(--text-secondary);
-      transition: all 0.2s;
-    }
-    .tab-switch button.active {
-      background: var(--accent); color: #fff;
-    }
+ /* TABS (in modal) */
+ .tab-switch {
+ display: flex; background: var(--bg-card);
+ border-radius: 8px; padding: 3px; margin-bottom: 16px;
+ }
+ .tab-switch button {
+ flex: 1; padding: 8px; border: none;
+ background: none; border-radius: 6px;
+ font-size: 13px; cursor: pointer;
+ color: var(--text-secondary);
+ transition: all 0.2s;
+ }
+ .tab-switch button.active {
+ background: var(--accent); color: #fff;
+ }
 
-    /* EMPTY STATE */
-    .empty-state {
-      text-align: center; padding: 60px 20px;
-      color: var(--text-secondary);
-    }
-    .empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
-    .empty-title { font-size: 16px; margin-bottom: 8px; }
-    .empty-desc { font-size: 13px; }
+ /* EMPTY STATE */
+ .empty-state {
+ text-align: center; padding: 60px 20px;
+ color: var(--text-secondary);
+ }
+ .empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
+ .empty-title { font-size: 16px; margin-bottom: 8px; }
+ .empty-desc { font-size: 13px; }
 
-    /* TOAST */
-    .toast {
-      position: fixed; bottom: 80px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: rgba(0,0,0,0.8); color: #fff;
-      padding: 10px 20px; border-radius: 20px;
-      font-size: 14px; z-index: 9999;
-      opacity: 0; transition: all 0.3s;
-      pointer-events: none; white-space: nowrap;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+ /* TOAST */
+ .toast {
+ position: fixed; bottom: 80px; left: 50%;
+ transform: translateX(-50%) translateY(20px);
+ background: rgba(0,0,0,0.8); color: #fff;
+ padding: 10px 20px; border-radius: 20px;
+ font-size: 14px; z-index: 9999;
+ opacity: 0; transition: all 0.3s;
+ pointer-events: none; white-space: nowrap;
+ }
+ .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* SEARCH RESULTS */
-    .result-source {
-      font-size: 11px; color: var(--text-secondary);
-      margin: 8px 0 4px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .result-source::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-    .result-count { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; }
+ /* SEARCH RESULTS */
+ .result-source {
+ font-size: 11px; color: var(--text-secondary);
+ margin: 8px 0 4px;
+ display: flex; align-items: center; gap: 6px;
+ }
+ .result-source::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+ .result-count { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; }
 
-    /* STATS CHART */
-    .stat-chart { display: flex; align-items: flex-end; gap: 2px; height: 60px; margin: 8px 0; }
-    .stat-bar { flex: 1; background: var(--accent); border-radius: 2px 2px 0 0; min-height: 4px; }
+ /* STATS CHART */
+ .stat-chart { display: flex; align-items: flex-end; gap: 2px; height: 60px; margin: 8px 0; }
+ .stat-bar { flex: 1; background: var(--accent); border-radius: 2px 2px 0 0; min-height: 4px; }
 
-    /* CATEGORIES */
-    .category-pills { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px; -webkit-overflow-scrolling: touch; }
-    .category-pills::-webkit-scrollbar { height: 0; }
-    .cat-pill {
-      padding: 6px 14px; border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--bg-card); color: var(--text-secondary);
-      font-size: 13px; white-space: nowrap;
-      cursor: pointer; flex-shrink: 0;
-    }
-    .cat-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+ /* CATEGORIES */
+ .category-pills { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px; -webkit-overflow-scrolling: touch; }
+ .category-pills::-webkit-scrollbar { height: 0; }
+ .cat-pill {
+ padding: 6px 14px; border-radius: 16px;
+ border: 1px solid var(--border);
+ background: var(--bg-card); color: var(--text-secondary);
+ font-size: 13px; white-space: nowrap;
+ cursor: pointer; flex-shrink: 0;
+ }
+ .cat-pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-    /* SORT DROPDOWN */
-    .sort-bar {
-      display: flex; gap: 8px; align-items: center;
-      font-size: 12px; color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-    .sort-btn { padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border); background: none; color: var(--text-secondary); font-size: 12px; cursor: pointer; }
-    .sort-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(233,69,96,0.1); }
+ /* SORT DROPDOWN */
+ .sort-bar {
+ display: flex; gap: 8px; align-items: center;
+ font-size: 12px; color: var(--text-secondary);
+ margin-bottom: 8px;
+ }
+ .sort-btn { padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border); background: none; color: var(--text-secondary); font-size: 12px; cursor: pointer; }
+ .sort-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(233,69,96,0.1); }
 
-    /* SOURCE MANAGER */
-    .source-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px; background: var(--bg-card);
-      border-radius: 10px; margin-bottom: 8px;
-      border: 1px solid var(--border);
-    }
-    .source-name { flex: 1; font-size: 14px; }
-    .source-count { font-size: 11px; color: var(--text-secondary); }
+ /* SOURCE MANAGER */
+ .source-item {
+ display: flex; align-items: center; gap: 10px;
+ padding: 12px; background: var(--bg-card);
+ border-radius: 10px; margin-bottom: 8px;
+ border: 1px solid var(--border);
+ }
+ .source-name { flex: 1; font-size: 14px; }
+ .source-count { font-size: 11px; color: var(--text-secondary); }
 
-    /* FILE IMPORT */
-    .file-drop {
-      border: 2px dashed var(--border);
-      border-radius: 12px; padding: 30px;
-      text-align: center; cursor: pointer;
-      transition: all 0.2s;
-      color: var(--text-secondary);
-    }
-    .file-drop:active, .file-drop:hover { border-color: var(--accent); color: var(--accent); }
-    .file-drop input { display: none; }
-    .file-drop-icon { font-size: 40px; margin-bottom: 8px; }
-  </style>
+ /* FILE IMPORT */
+ .file-drop {
+ border: 2px dashed var(--border);
+ border-radius: 12px; padding: 30px;
+ text-align: center; cursor: pointer;
+ transition: all 0.2s;
+ color: var(--text-secondary);
+ }
+ .file-drop:active, .file-drop:hover { border-color: var(--accent); color: var(--accent); }
+ .file-drop input { display: none; }
+ .file-drop-icon { font-size: 40px; margin-bottom: 8px; }
+ </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- ======= VIEW: SHELF (书架) ======= -->
-  <div id="view-shelf" class="view active">
-    <div class="status-bar"></div>
-    <div class="top-bar">
-      <div style="width:36px"></div>
-      <h1>📚 书架</h1>
-      <button class="icon-btn" onclick="showModal('settings-modal')" title="设置">⚙️</button>
-    </div>
-    <div class="scroll-area" id="shelf-content">
-      <!-- 书架内容由JS填充 -->
-    </div>
-  </div>
+ <!-- ======= VIEW: SHELF (书架) ======= -->
+ <div id="view-shelf" class="view active">
+ <div class="status-bar"></div>
+ <div class="top-bar">
+ <div style="width:36px"></div>
+ <h1>📚 书架</h1>
+ <button class="icon-btn" onclick="showModal('settings-modal')" title="设置">⚙️</button>
+ </div>
+ <div class="scroll-area" id="shelf-content">
+ <!-- 书架内容由JS填充 -->
+ </div>
+ </div>
 
-  <!-- ======= VIEW: DISCOVER (发现) ======= -->
-  <div id="view-discover" class="view">
-    <div class="status-bar"></div>
-    <div class="top-bar">
-      <div style="width:36px"></div>
-      <h1>🔍 发现</h1>
-      <button class="icon-btn" onclick="showModal('settings-modal')" title="设置">⚙️</button>
-    </div>
-    <div class="scroll-area">
-      <div class="search-bar">
-        <input type="text" id="search-input" placeholder="搜索书名/作者..." onkeydown="if(event.key==='Enter')startSearch()">
-        <button onclick="startSearch()">搜索</button>
-      </div>
-      <div class="category-pills" id="category-pills">
-        <button class="cat-pill active" data-cat="全部">全部</button>
-        <button class="cat-pill" data-cat="玄幻">玄幻</button>
-        <button class="cat-pill" data-cat="都市">都市</button>
-        <button class="cat-pill" data-cat="穿越">穿越</button>
-        <button class="cat-pill" data-cat="科幻">科幻</button>
-        <button class="cat-pill" data-cat="武侠">武侠</button>
-        <button class="cat-pill" data-cat="悬疑">悬疑</button>
-        <button class="cat-pill" data-cat="言情">言情</button>
-        <button class="cat-pill" data-cat="历史">历史</button>
-      </div>
-      <div class="sort-bar">
-        <span>排序:</span>
-        <button class="sort-btn active" data-sort="speed" onclick="setSort('speed',this)">速度最快</button>
-        <button class="sort-btn" data-sort="completeness" onclick="setSort('completeness',this)">资源完整</button>
-        <button class="sort-btn" data-sort="name" onclick="setSort('name',this)">书名排序</button>
-      </div>
-      <div id="search-results"></div>
-    </div>
-  </div>
+ <!-- ======= VIEW: DISCOVER (发现) ======= -->
+ <div id="view-discover" class="view">
+ <div class="status-bar"></div>
+ <div class="top-bar">
+ <div style="width:36px"></div>
+ <h1>🔍 发现</h1>
+ <button class="icon-btn" onclick="showModal('settings-modal')" title="设置">⚙️</button>
+ </div>
+ <div class="scroll-area">
+ <div class="search-bar">
+ <input type="text" id="search-input" placeholder="搜索书名/作者..." onkeydown="if(event.key==='Enter')startSearch()">
+ <button onclick="startSearch()">搜索</button>
+ </div>
+ <div class="category-pills" id="category-pills">
+ <button class="cat-pill active" data-cat="全部">全部</button>
+ <button class="cat-pill" data-cat="玄幻">玄幻</button>
+ <button class="cat-pill" data-cat="都市">都市</button>
+ <button class="cat-pill" data-cat="穿越">穿越</button>
+ <button class="cat-pill" data-cat="科幻">科幻</button>
+ <button class="cat-pill" data-cat="武侠">武侠</button>
+ <button class="cat-pill" data-cat="悬疑">悬疑</button>
+ <button class="cat-pill" data-cat="言情">言情</button>
+ <button class="cat-pill" data-cat="历史">历史</button>
+ </div>
+ <div class="sort-bar">
+ <span>排序:</span>
+ <button class="sort-btn active" data-sort="speed" onclick="setSort('speed',this)">速度最快</button>
+ <button class="sort-btn" data-sort="completeness" onclick="setSort('completeness',this)">资源完整</button>
+ <button class="sort-btn" data-sort="name" onclick="setSort('name',this)">书名排序</button>
+ </div>
+ <div id="search-results"></div>
+ </div>
+ </div>
 
-  <!-- ======= VIEW: STATS (统计) ======= -->
-  <div id="view-stats" class="view">
-    <div class="status-bar"></div>
-    <div class="top-bar">
-      <div style="width:36px"></div>
-      <h1>📊 阅读统计</h1>
-      <div style="width:36px"></div>
-    </div>
-    <div class="scroll-area" id="stats-content">
-      <!-- 统计内容由JS填充 -->
-    </div>
-  </div>
+ <!-- ======= VIEW: STATS (统计) ======= -->
+ <div id="view-stats" class="view">
+ <div class="status-bar"></div>
+ <div class="top-bar">
+ <div style="width:36px"></div>
+ <h1>📊 阅读统计</h1>
+ <div style="width:36px"></div>
+ </div>
+ <div class="scroll-area" id="stats-content">
+ <!-- 统计内容由JS填充 -->
+ </div>
+ </div>
 
-  <!-- ======= VIEW: SOURCES (书源) ======= -->
-  <div id="view-sources" class="view">
-    <div class="status-bar"></div>
-    <div class="top-bar">
-      <div style="width:36px"></div>
-      <h1>⚡ 书源</h1>
-      <button class="icon-btn" onclick="showModal('import-modal')" title="导入书源">➕</button>
-    </div>
-    <div class="scroll-area" id="sources-content">
-      <!-- 书源内容由JS填充 -->
-    </div>
-  </div>
+ <!-- ======= VIEW: SOURCES (书源) ======= -->
+ <div id="view-sources" class="view">
+ <div class="status-bar"></div>
+ <div class="top-bar">
+ <div style="width:36px"></div>
+ <h1>⚡ 书源</h1>
+ <button class="icon-btn" onclick="showModal('import-modal')" title="导入书源">➕</button>
+ </div>
+ <div class="scroll-area" id="sources-content">
+ <!-- 书源内容由JS填充 -->
+ </div>
+ </div>
 
-  <!-- ======= BOTTOM TAB BAR ======= -->
-  <div class="tab-bar">
-    <button class="tab-item active" data-view="shelf" onclick="switchTab(this)">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
-      书架
-    </button>
-    <button class="tab-item" data-view="discover" onclick="switchTab(this)">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      发现
-    </button>
-    <button class="tab-item" data-view="stats" onclick="switchTab(this)">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-      统计
-    </button>
-    <button class="tab-item" data-view="sources" onclick="switchTab(this)">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
-      书源
-    </button>
-  </div>
+ <!-- ======= BOTTOM TAB BAR ======= -->
+ <div class="tab-bar">
+ <button class="tab-item active" data-view="shelf" onclick="switchTab(this)">
+ <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+ 书架
+ </button>
+ <button class="tab-item" data-view="discover" onclick="switchTab(this)">
+ <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+ 发现
+ </button>
+ <button class="tab-item" data-view="stats" onclick="switchTab(this)">
+ <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+ 统计
+ </button>
+ <button class="tab-item" data-view="sources" onclick="switchTab(this)">
+ <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+ 书源
+ </button>
+ </div>
 </div>
 
 <!-- ======= READER VIEW ======= -->
 <div id="reader-view">
-  <div class="reader-header">
-    <button class="icon-btn" onclick="closeReader()" title="返回">←</button>
-    <div style="flex:1;min-width:0">
-      <div id="reader-title" style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
-      <div id="reader-chapter-name" style="font-size:11px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
-    </div>
-    <button class="icon-btn" onclick="toggleReaderSettings()" title="设置">⚙️</button>
-  </div>
-  <div id="reader-content" class="reader-content" onscroll="onReaderScroll()"></div>
-  <div class="reader-toolbar">
-    <div class="toolbar-row">
-      <button class="toolbar-btn" onclick="prevChapter()">◀ 上一章</button>
-      <span id="reader-progress-text">0%</span>
-      <button class="toolbar-btn" onclick="nextChapter()">下一章 ▶</button>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);">
-      <button class="toolbar-btn" onclick="showChapterList()">目录</button>
-      <button class="toolbar-btn" onclick="toggleTTS()">🔊 听书</button>
-      <button class="toolbar-btn" id="bookmark-btn" onclick="toggleBookmark()">🔖 书签</button>
-    </div>
-  </div>
-  <!-- Reader Settings Panel -->
-  <div class="reader-settings" id="reader-settings">
-    <div class="setting-row">
-      <div class="setting-label">字体大小: <span id="font-size-val">16</span>px</div>
-      <input type="range" min="12" max="28" value="16" id="font-size-slider" oninput="changeFontSize(this.value)">
-    </div>
-    <div class="setting-row">
-      <div class="setting-label">行距</div>
-      <div class="font-options">
-        <button class="font-opt" onclick="changeLineHeight(1.5,this)">紧凑</button>
-        <button class="font-opt active" onclick="changeLineHeight(1.8,this)">标准</button>
-        <button class="font-opt" onclick="changeLineHeight(2.2,this)">宽松</button>
-      </div>
-    </div>
-    <div class="setting-row">
-      <div class="setting-label">背景主题</div>
-      <div class="bg-options">
-        <button class="bg-opt active" style="background:#1a1a2e" onclick="changeReaderTheme('dark',this)" title="深色"></button>
-        <button class="bg-opt" style="background:#f5f5f0" onclick="changeReaderTheme('light',this)" title="浅色"></button>
-        <button class="bg-opt" style="background:#f4ecd8" onclick="changeReaderTheme('sepia',this)" title="护眼"></button>
-        <button class="bg-opt" style="background:#0d0d0d" onclick="changeReaderTheme('black',this)" title="纯黑"></button>
-      </div>
-    </div>
-  </div>
+ <div class="reader-header">
+ <button class="icon-btn" onclick="closeReader()" title="返回">←</button>
+ <div style="flex:1;min-width:0">
+ <div id="reader-title" style="font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+ <div id="reader-chapter-name" style="font-size:11px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+ </div>
+ <button class="icon-btn" onclick="toggleReaderSettings()" title="设置">⚙️</button>
+ </div>
+ <div id="reader-content" class="reader-content" onscroll="onReaderScroll()"></div>
+ <div class="reader-toolbar">
+ <div class="toolbar-row">
+ <button class="toolbar-btn" onclick="prevChapter()">◀ 上一章</button>
+ <span id="reader-progress-text">0%</span>
+ <button class="toolbar-btn" onclick="nextChapter()">下一章 ▶</button>
+ </div>
+ <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);">
+ <button class="toolbar-btn" onclick="showChapterList()">目录</button>
+ <button class="toolbar-btn" onclick="toggleTTS()">🔊 听书</button>
+ <button class="toolbar-btn" id="bookmark-btn" onclick="toggleBookmark()">🔖 书签</button>
+ </div>
+ </div>
+ <!-- Reader Settings Panel -->
+ <div class="reader-settings" id="reader-settings">
+ <div class="setting-row">
+ <div class="setting-label">字体大小: <span id="font-size-val">16</span>px</div>
+ <input type="range" min="12" max="28" value="16" id="font-size-slider" oninput="changeFontSize(this.value)">
+ </div>
+ <div class="setting-row">
+ <div class="setting-label">行距</div>
+ <div class="font-options">
+ <button class="font-opt" onclick="changeLineHeight(1.5,this)">紧凑</button>
+ <button class="font-opt active" onclick="changeLineHeight(1.8,this)">标准</button>
+ <button class="font-opt" onclick="changeLineHeight(2.2,this)">宽松</button>
+ </div>
+ </div>
+ <div class="setting-row">
+ <div class="setting-label">背景主题</div>
+ <div class="bg-options">
+ <button class="bg-opt active" style="background:#1a1a2e" onclick="changeReaderTheme('dark',this)" title="深色"></button>
+ <button class="bg-opt" style="background:#f5f5f0" onclick="changeReaderTheme('light',this)" title="浅色"></button>
+ <button class="bg-opt" style="background:#f4ecd8" onclick="changeReaderTheme('sepia',this)" title="护眼"></button>
+ <button class="bg-opt" style="background:#0d0d0d" onclick="changeReaderTheme('black',this)" title="纯黑"></button>
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- ======= SETTINGS MODAL ======= -->
 <div class="modal-overlay" id="settings-modal" onclick="if(event.target===this)hideModal('settings-modal')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">设置</div>
-    <div class="setting-item">
-      <span>夜间模式</span>
-      <button class="toggle" id="night-toggle" onclick="toggleNightMode()"></button>
-    </div>
-    <div class="setting-item">
-      <span>书源导入</span>
-      <button class="icon-btn" style="font-size:14px" onclick="hideModal('settings-modal');showModal('import-modal')">→</button>
-    </div>
-    <div class="setting-item">
-      <span>本地导入（TXT/EPUB）</span>
-      <button class="icon-btn" style="font-size:14px" onclick="hideModal('settings-modal');showImportFile()">→</button>
-    </div>
-    <div class="setting-item">
-      <span>阅读统计</span>
-      <button class="icon-btn" style="font-size:14px" onclick="hideModal('settings-modal');switchTab(document.querySelector('[data-view=stats]'))">→</button>
-    </div>
-    <div class="setting-item">
-      <span>清空缓存</span>
-      <button class="icon-btn" style="font-size:14px" onclick="clearCache()">🗑️</button>
-    </div>
-    <div class="setting-item">
-      <span>版本</span>
-      <span style="color:var(--text-secondary);font-size:13px">小说阅读器 Pro v1.0</span>
-    </div>
-  </div>
+ <div class="modal">
+ <div class="modal-handle"></div>
+ <div class="modal-title">设置</div>
+ <div class="setting-item">
+ <span>夜间模式</span>
+ <button class="toggle" id="night-toggle" onclick="toggleNightMode()"></button>
+ </div>
+ <div class="setting-item">
+ <span>书源导入</span>
+ <button class="icon-btn" style="font-size:14px" onclick="hideModal('settings-modal');showModal('import-modal')">→</button>
+ </div>
+ <div class="setting-item">
+ <span>本地导入（TXT/EPUB）</span>
+ <button class="icon-btn" style="font-size:14px" onclick="hideModal('settings-modal');showImportFile()">→</button>
+ </div>
+ <div class="setting-item">
+ <span>阅读统计</span>
+ <button class="icon-btn" style="font-size:14px" onclick="hideModal('settings-modal');switchTab(document.querySelector('[data-view=stats]'))">→</button>
+ </div>
+ <div class="setting-item">
+ <span>清空缓存</span>
+ <button class="icon-btn" style="font-size:14px" onclick="clearCache()">🗑️</button>
+ </div>
+ <div class="setting-item">
+ <span>版本</span>
+ <span style="color:var(--text-secondary);font-size:13px">小说阅读器 Pro v1.0</span>
+ </div>
+ </div>
 </div>
 
 <!-- ======= IMPORT MODAL ======= -->
 <div class="modal-overlay" id="import-modal" onclick="if(event.target===this)hideModal('import-modal')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">导入书源</div>
-    <div class="tab-switch">
-      <button class="active" onclick="switchImportTab(this,'url-tab')">JSON 链接</button>
-      <button onclick="switchImportTab(this,'file-tab')">本地文件</button>
-    </div>
-    <div id="url-tab">
-      <div class="import-url-list" id="import-url-list"></div>
-      <button onclick="addImportUrl()" style="width:100%;padding:10px;border:1px dashed var(--border);border-radius:8px;background:none;color:var(--accent);cursor:pointer;margin-top:8px">➕ 添加链接</button>
-      <button onclick="importFromUrls()" style="width:100%;padding:12px;border:none;border-radius:8px;background:var(--accent);color:#fff;margin-top:12px;cursor:pointer;font-size:15px">开始导入</button>
-    </div>
-    <div id="file-tab" style="display:none">
-      <div class="file-drop" onclick="document.getElementById('file-input').click()">
-        <div class="file-drop-icon">📂</div>
-        <div>点击选择书源 JSON 文件</div>
-        <div style="font-size:12px;margin-top:4px">支持 .json 格式</div>
-        <input type="file" id="file-input" accept=".json" onchange="importFromFile(this.files[0])">
-      </div>
-    </div>
-  </div>
+ <div class="modal">
+ <div class="modal-handle"></div>
+ <div class="modal-title">导入书源</div>
+ <div class="tab-switch">
+ <button class="active" onclick="switchImportTab(this,'url-tab')">JSON 链接</button>
+ <button onclick="switchImportTab(this,'file-tab')">本地文件</button>
+ </div>
+ <div id="url-tab">
+ <div class="import-url-list" id="import-url-list"></div>
+ <button onclick="addImportUrl()" style="width:100%;padding:10px;border:1px dashed var(--border);border-radius:8px;background:none;color:var(--accent);cursor:pointer;margin-top:8px">➕ 添加链接</button>
+ <button onclick="importFromUrls()" style="width:100%;padding:12px;border:none;border-radius:8px;background:var(--accent);color:#fff;margin-top:12px;cursor:pointer;font-size:15px">开始导入</button>
+ </div>
+ <div id="file-tab" style="display:none">
+ <div class="file-drop" onclick="document.getElementById('file-input').click()">
+ <div class="file-drop-icon">📂</div>
+ <div>点击选择书源 JSON 文件</div>
+ <div style="font-size:12px;margin-top:4px">支持 .json 格式</div>
+ <input type="file" id="file-input" accept=".json" onchange="importFromFile(this.files[0])">
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- ======= CHAPTER LIST MODAL ======= -->
 <div class="modal-overlay" id="chapters-modal" onclick="if(event.target===this)hideModal('chapters-modal')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">目录</div>
-    <div id="chapter-list" style="max-height:60vh;overflow-y:auto"></div>
-  </div>
+ <div class="modal">
+ <div class="modal-handle"></div>
+ <div class="modal-title">目录</div>
+ <div id="chapter-list" style="max-height:60vh;overflow-y:auto"></div>
+ </div>
 </div>
 
 <!-- ======= TOAST ======= -->
@@ -712,21 +712,21 @@ const STORE_KEY = 'novelReaderPro_v1';
 let state = loadState();
 let searchResults = [];
 let importUrls = state.importUrls || [
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241122.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411283.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241128.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241125.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241121.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411183.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411202.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241120.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411192.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241119.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241118.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241108.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241107.json',
-  'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411062.json',
-  'http://www.yckceo1.com/yuedu/shuyuan/json/id/5783.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241122.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411283.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241128.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241125.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241121.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411183.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411202.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241120.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411192.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241119.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241118.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241108.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/241107.json',
+ 'https://gcore.jsdelivr.net/gh/yuedu521/yiciyuan/2411062.json',
+ 'http://www.yckceo1.com/yuedu/shuyuan/json/id/5783.json',
 ];
 let currentBook = null;
 let currentChapter = 0;
@@ -737,217 +737,217 @@ let searchAbortControllers = [];
 
 // ======= STATE MANAGEMENT =======
 function loadState() {
-  try {
-    const s = localStorage.getItem(STORE_KEY);
-    return s ? JSON.parse(s) : defaultState();
-  } catch { return defaultState(); }
+ try {
+ const s = localStorage.getItem(STORE_KEY);
+ return s ? JSON.parse(s) : defaultState();
+ } catch { return defaultState(); }
 }
 function defaultState() {
-  return {
-    sources: [], sourceUrls: [],
-    enabledSources: new Set(),
-    shelf: [], // [{id, title, author, cover, sourceId, url, readHistory}]
-    history: [],
-    bookmarks: [], // [{bookId, chapterIdx, pos, time}]
-    readStats: { totalBooks: 0, totalChapters: 0, totalChars: 0, daily: {} },
-    settings: { nightMode: false, readerTheme: 'dark', fontSize: 16, lineHeight: 1.8 },
-    importUrls: []
-  };
+ return {
+ sources: [], sourceUrls: [],
+ enabledSources: new Set(),
+ shelf: [], // [{id, title, author, cover, sourceId, url, readHistory}]
+ history: [],
+ bookmarks: [], // [{bookId, chapterIdx, pos, time}]
+ readStats: { totalBooks: 0, totalChapters: 0, totalChars: 0, daily: {} },
+ settings: { nightMode: false, readerTheme: 'dark', fontSize: 16, lineHeight: 1.8 },
+ importUrls: []
+ };
 }
 function saveState() {
-  try {
-    const s = JSON.parse(JSON.stringify(state));
-    s.enabledSources = Array.from(s.enabledSources || new Set());
-    // also store in the object form
-    const store = {...state, enabledSources: Array.from(state.enabledSources || [])};
-    localStorage.setItem(STORE_KEY, JSON.stringify(store));
-  } catch(e) { console.error('Save state error:', e); }
+ try {
+ const s = JSON.parse(JSON.stringify(state));
+ s.enabledSources = Array.from(s.enabledSources || new Set());
+ // also store in the object form
+ const store = {...state, enabledSources: Array.from(state.enabledSources || [])};
+ localStorage.setItem(STORE_KEY, JSON.stringify(store));
+ } catch(e) { console.error('Save state error:', e); }
 }
 function getState() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return defaultState();
-    const s = JSON.parse(raw);
-    if (s.enabledSources && !Array.isArray(s.enabledSources)) {
-      s.enabledSources = new Set(s.enabledSources);
-    } else {
-      s.enabledSources = new Set(s.enabledSources || []);
-    }
-    return s;
-  } catch { return defaultState(); }
+ try {
+ const raw = localStorage.getItem(STORE_KEY);
+ if (!raw) return defaultState();
+ const s = JSON.parse(raw);
+ if (s.enabledSources && !Array.isArray(s.enabledSources)) {
+ s.enabledSources = new Set(s.enabledSources);
+ } else {
+ s.enabledSources = new Set(s.enabledSources || []);
+ }
+ return s;
+ } catch { return defaultState(); }
 }
 
 // ======= INIT =======
 (function init() {
-  state = getState();
-  if (!state.importUrls || state.importUrls.length === 0) {
-    state.importUrls = [...importUrls];
-  }
-  importUrls = state.importUrls;
-  applyTheme();
-  renderShelf();
-  renderStats();
-  renderSources();
-  renderImportUrls();
-  checkDaily();
-  // Auto-import from URL parameter
-  const p = new URLSearchParams(window.location.search);
-  if (p.get('autoimport') === '1') {
-    setTimeout(() => importFromUrls(), 800);
-  }
+ state = getState();
+ if (!state.importUrls || state.importUrls.length === 0) {
+ state.importUrls = [...importUrls];
+ }
+ importUrls = state.importUrls;
+ applyTheme();
+ renderShelf();
+ renderStats();
+ renderSources();
+ renderImportUrls();
+ checkDaily();
+ // Auto-import from URL parameter
+ const p = new URLSearchParams(window.location.search);
+ if (p.get('autoimport') === '1') {
+ setTimeout(() => importFromUrls(), 800);
+ }
 })();
 
 // ======= THEME =======
 function applyTheme() {
-  const theme = state.settings.nightMode ? 'dark' : '';
-  document.documentElement.setAttribute('data-theme', theme);
-  const toggle = document.getElementById('night-toggle');
-  if (toggle) toggle.classList.toggle('active', state.settings.nightMode);
+ const theme = state.settings.nightMode ? 'dark' : '';
+ document.documentElement.setAttribute('data-theme', theme);
+ const toggle = document.getElementById('night-toggle');
+ if (toggle) toggle.classList.toggle('active', state.settings.nightMode);
 }
 function toggleNightMode() {
-  state.settings.nightMode = !state.settings.nightMode;
-  applyTheme();
-  saveState();
+ state.settings.nightMode = !state.settings.nightMode;
+ applyTheme();
+ saveState();
 }
 
 // ======= TAB NAVIGATION =======
 function switchTab(btn) {
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('view-' + btn.dataset.view).classList.add('active');
+ document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+ document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+ btn.classList.add('active');
+ document.getElementById('view-' + btn.dataset.view).classList.add('active');
 }
 
 // ======= MODAL =======
 function showModal(id) { document.getElementById(id).classList.add('active'); }
 function hideModal(id) { document.getElementById(id).classList.remove('active'); }
 function switchImportTab(btn, tabId) {
-  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('url-tab').style.display = btn.textContent.includes('链接') ? '' : 'none';
-  document.getElementById('file-tab').style.display = btn.textContent.includes('文件') ? '' : 'none';
+ btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+ btn.classList.add('active');
+ document.getElementById('url-tab').style.display = btn.textContent.includes('链接') ? '' : 'none';
+ document.getElementById('file-tab').style.display = btn.textContent.includes('文件') ? '' : 'none';
 }
 
 // ======= IMPORT URLS =======
 function renderImportUrls() {
-  const list = document.getElementById('import-url-list');
-  if (!list) return;
-  list.innerHTML = importUrls.map((u, i) => `
-    <div class="import-url-item">
-      <span style="font-size:12px;color:var(--text-secondary)">${i+1}</span>
-      <input type="text" value="${u}" onchange="importUrls[${i}]=this.value" placeholder="书源 JSON 链接">
-      <button class="del-btn" onclick="removeImportUrl(${i})">×</button>
-    </div>
-  `).join('');
-  state.importUrls = importUrls;
-  saveState();
+ const list = document.getElementById('import-url-list');
+ if (!list) return;
+ list.innerHTML = importUrls.map((u, i) => `
+ <div class="import-url-item">
+ <span style="font-size:12px;color:var(--text-secondary)">${i+1}</span>
+ <input type="text" value="${u}" onchange="importUrls[${i}]=this.value" placeholder="书源 JSON 链接">
+ <button class="del-btn" onclick="removeImportUrl(${i})">×</button>
+ </div>
+ `).join('');
+ state.importUrls = importUrls;
+ saveState();
 }
 function addImportUrl() { importUrls.push(''); renderImportUrls(); }
 function removeImportUrl(i) { importUrls.splice(i, 1); renderImportUrls(); }
 
 // ======= IMPORT BOOK SOURCES =======
 async function importFromUrls() {
-  const validUrls = importUrls.filter(u => u.trim() && u.startsWith('http'));
-  if (validUrls.length === 0) { toast('请输入至少一个有效的 JSON 链接'); return; }
-  state.importUrls = validUrls;
-  saveState();
-  toast(`正在导入 ${validUrls.length} 个书源...`);
-  let totalNew = 0;
-  for (const url of validUrls) {
-    try {
-      const res = await fetchWithProxy(url);
-      const data = typeof res === 'string' ? JSON.parse(res) : res;
-      const sources = Array.isArray(data) ? data : (data.bookSources || []);
-      const existing = new Set(state.sources.map(s => s.bookSourceUrl || s.sourceUrl || s.url));
-      let added = 0;
-      for (const src of sources) {
-        const srcUrl = src.bookSourceUrl || src.sourceUrl || src.url || '';
-        if (!existing.has(srcUrl) && srcUrl) {
-          state.sources.push({...src, _id: srcUrl, enabled: true});
-          existing.add(srcUrl);
-          added++;
-        }
-      }
-      if (!state.sourceUrls.includes(url)) {
-        state.sourceUrls.push(url);
-      }
-      totalNew += added;
-    } catch(e) { console.error('Import error for', url, e); }
-  }
-  state.enabledSources = new Set(state.sources.filter(s => s.enabled).map(s => s._id));
-  saveState();
-  renderSources();
-  hideModal('import-modal');
-  toast(`导入完成！新增 ${totalNew} 个书源，当前共 ${state.sources.length} 个`);
+ const validUrls = importUrls.filter(u => u.trim() && u.startsWith('http'));
+ if (validUrls.length === 0) { toast('请输入至少一个有效的 JSON 链接'); return; }
+ state.importUrls = validUrls;
+ saveState();
+ toast(`正在导入 ${validUrls.length} 个书源...`);
+ let totalNew = 0;
+ for (const url of validUrls) {
+ try {
+ const res = await fetchWithProxy(url);
+ const data = typeof res === 'string' ? JSON.parse(res) : res;
+ const sources = Array.isArray(data) ? data : (data.bookSources || []);
+ const existing = new Set(state.sources.map(s => s.bookSourceUrl || s.sourceUrl || s.url));
+ let added = 0;
+ for (const src of sources) {
+ const srcUrl = src.bookSourceUrl || src.sourceUrl || src.url || '';
+ if (!existing.has(srcUrl) && srcUrl) {
+ state.sources.push({...src, _id: srcUrl, enabled: true});
+ existing.add(srcUrl);
+ added++;
+ }
+ }
+ if (!state.sourceUrls.includes(url)) {
+ state.sourceUrls.push(url);
+ }
+ totalNew += added;
+ } catch(e) { console.error('Import error for', url, e); }
+ }
+ state.enabledSources = new Set(state.sources.filter(s => s.enabled).map(s => s._id));
+ saveState();
+ renderSources();
+ hideModal('import-modal');
+ toast(`导入完成！新增 ${totalNew} 个书源，当前共 ${state.sources.length} 个`);
 }
 
 async function importFromFile(file) {
-  if (!file) return;
-  try {
-    const text = await file.text();
-    const data = JSON.parse(text);
-    const sources = Array.isArray(data) ? data : (data.bookSources || []);
-    let added = 0;
-    for (const src of sources) {
-      const srcUrl = src.bookSourceUrl || src.sourceUrl || src.url || '';
-      const exists = state.sources.find(s => (s.bookSourceUrl || s.sourceUrl || s.url || '') === srcUrl);
-      if (!exists && srcUrl) {
-        state.sources.push({...src, _id: srcUrl, enabled: true});
-        added++;
-      }
-    }
-    state.enabledSources = new Set(state.sources.filter(s => s.enabled).map(s => s._id));
-    saveState();
-    renderSources();
-    hideModal('import-modal');
-    toast(`导入 ${added} 个书源`);
-  } catch(e) { toast('文件解析失败：' + e.message); }
+ if (!file) return;
+ try {
+ const text = await file.text();
+ const data = JSON.parse(text);
+ const sources = Array.isArray(data) ? data : (data.bookSources || []);
+ let added = 0;
+ for (const src of sources) {
+ const srcUrl = src.bookSourceUrl || src.sourceUrl || src.url || '';
+ const exists = state.sources.find(s => (s.bookSourceUrl || s.sourceUrl || s.url || '') === srcUrl);
+ if (!exists && srcUrl) {
+ state.sources.push({...src, _id: srcUrl, enabled: true});
+ added++;
+ }
+ }
+ state.enabledSources = new Set(state.sources.filter(s => s.enabled).map(s => s._id));
+ saveState();
+ renderSources();
+ hideModal('import-modal');
+ toast(`导入 ${added} 个书源`);
+ } catch(e) { toast('文件解析失败：' + e.message); }
 }
 
 // ======= FETCH WITH PROXY =======
 async function fetchWithProxy(url, options = {}) {
-  try {
-    const proxyUrl = PROXY + encodeURIComponent(url);
-    const res = await fetch(proxyUrl, { timeout: 10000, ...options });
-    const text = await res.text();
-    // Try detect encoding
-    if (looksLikeGarbled(text)) {
-      // Try Big5 or GBK - use TextDecoder
-      try {
-        const bytes = new Uint8Array(await fetch(proxyUrl).then(r => r.arrayBuffer()));
-        // Check for GBK signature
-        const decoder = new TextDecoder('gbk');
-        const decoded = decoder.decode(bytes);
-        if (!looksLikeGarbled(decoded)) return JSON.parse(decoded);
-        const decoder2 = new TextDecoder('big5');
-        return JSON.parse(decoder2.decode(bytes));
-      } catch {}
-    }
-    return JSON.parse(text);
-  } catch(e) {
-    console.error('Fetch error:', e);
-    return null;
-  }
+ try {
+ const proxyUrl = PROXY + encodeURIComponent(url);
+ const res = await fetch(proxyUrl, { timeout: 10000, ...options });
+ const text = await res.text();
+ // Try detect encoding
+ if (looksLikeGarbled(text)) {
+ // Try Big5 or GBK - use TextDecoder
+ try {
+ const bytes = new Uint8Array(await fetch(proxyUrl).then(r => r.arrayBuffer()));
+ // Check for GBK signature
+ const decoder = new TextDecoder('gbk');
+ const decoded = decoder.decode(bytes);
+ if (!looksLikeGarbled(decoded)) return JSON.parse(decoded);
+ const decoder2 = new TextDecoder('big5');
+ return JSON.parse(decoder2.decode(bytes));
+ } catch {}
+ }
+ return JSON.parse(text);
+ } catch(e) {
+ console.error('Fetch error:', e);
+ return null;
+ }
 }
 function looksLikeGarbled(str) {
-  if (!str || str.length < 10) return false;
-  const validChars = str.match(/[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef\u0020-\u007e]/g) || [];
-  return validChars.length / str.length < 0.3;
+ if (!str || str.length < 10) return false;
+ const validChars = str.match(/[\u4e00-\u9fff\u3000-\u303f\uff00-\uffef\u0020-\u007e]/g) || [];
+ return validChars.length / str.length < 0.3;
 }
 async function fetchTextWithProxy(url) {
-  try {
-    const proxyUrl = PROXY + encodeURIComponent(url);
-    const res = await fetch(proxyUrl, { timeout: 15000 });
-    const bytes = new Uint8Array(await res.arrayBuffer());
-    // Try UTF-8 first
-    const text = new TextDecoder('utf-8').decode(bytes);
-    if (looksLikeGarbled(text)) {
-      const gbText = new TextDecoder('gbk').decode(bytes);
-      if (!looksLikeGarbled(gbText)) return gbText;
-      return new TextDecoder('big5').decode(bytes);
-    }
-    return text;
-  } catch(e) { return null; }
+ try {
+ const proxyUrl = PROXY + encodeURIComponent(url);
+ const res = await fetch(proxyUrl, { timeout: 15000 });
+ const bytes = new Uint8Array(await res.arrayBuffer());
+ // Try UTF-8 first
+ const text = new TextDecoder('utf-8').decode(bytes);
+ if (looksLikeGarbled(text)) {
+ const gbText = new TextDecoder('gbk').decode(bytes);
+ if (!looksLikeGarbled(gbText)) return gbText;
+ return new TextDecoder('big5').decode(bytes);
+ }
+ return text;
+ } catch(e) { return null; }
 }
 
 // ======= SEARCH =======
@@ -956,957 +956,962 @@ let currentCategory = '全部';
 let searchLoading = false;
 
 function setSort(sort, btn) {
-  currentSort = sort;
-  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+ currentSort = sort;
+ document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+ btn.classList.add('active');
 }
 
 function startSearch() {
-  if (searchLoading) return;
-  const keyword = document.getElementById('search-input').value.trim();
-  if (!keyword) { toast('请输入搜索词'); return; }
-  const enabled = state.sources.filter(s => state.enabledSources.has(s._id) && s.searchUrl);
-  if (enabled.length === 0) { toast('请先导入并启用书源'); showModal('import-modal'); return; }
-  searchMultiSource(keyword, enabled);
+ if (searchLoading) return;
+ const keyword = document.getElementById('search-input').value.trim();
+ if (!keyword) { toast('请输入搜索词'); return; }
+ const enabled = state.sources.filter(s => state.enabledSources.has(s._id) && s.searchUrl);
+ if (enabled.length === 0) { toast('请先导入并启用书源'); showModal('import-modal'); return; }
+ searchMultiSource(keyword, enabled);
 }
 
 async function searchMultiSource(keyword, sources) {
-  searchLoading = true;
-  searchAbortControllers.forEach(c => c.abort());
-  searchAbortControllers = [];
-  const container = document.getElementById('search-results');
-  container.innerHTML = '<div class="loading"><div class="spinner"></div>搜索中...</div>';
-  const results = [];
-  const promises = sources.map(async (src) => {
-    const controller = new AbortController();
-    searchAbortControllers.push(controller);
-    const startTime = Date.now();
-    try {
-      const searchUrl = buildSearchUrl(src, keyword);
-      if (!searchUrl) return;
-      const html = await fetchTextWithProxy(searchUrl);
-      if (!html || controller.signal.aborted) return;
-      const elapsed = Date.now() - startTime;
-      const found = parseSearchResults(src, html, keyword, searchUrl);
-      return { src, found, elapsed };
-    } catch(e) { return null; }
-  });
-  let resolved = 0;
-  for (const p of promises) {
-    const r = await p;
-    resolved++;
-    if (r && r.found && r.found.length > 0) {
-      results.push(...r.found.map(b => ({...b, _source: r.src, _elapsed: r.elapsed})));
-    }
-    container.innerHTML = `<div class="result-count">已搜索 ${resolved}/${sources.length} 个书源，找到 ${results.length} 条结果</div>` + renderResults(results);
-  }
-  searchLoading = false;
-  sortResults(results);
-  searchResults = results;
-  container.innerHTML = `<div class="result-count">找到 ${results.length} 本书（${sources.length} 个书源）</div>` + renderResults(results);
+ searchLoading = true;
+ searchAbortControllers.forEach(c => c.abort());
+ searchAbortControllers = [];
+ const container = document.getElementById('search-results');
+ container.innerHTML = '<div class="loading"><div class="spinner"></div>搜索中...</div>';
+ const results = [];
+ const promises = sources.map(async (src) => {
+ const controller = new AbortController();
+ searchAbortControllers.push(controller);
+ const startTime = Date.now();
+ try {
+ const searchUrl = buildSearchUrl(src, keyword);
+ if (!searchUrl) return;
+ const html = await fetchTextWithProxy(searchUrl);
+ if (!html || controller.signal.aborted) return;
+ const elapsed = Date.now() - startTime;
+ const found = parseSearchResults(src, html, keyword, searchUrl);
+ return { src, found, elapsed };
+ } catch(e) { return null; }
+ });
+ let resolved = 0;
+ for (const p of promises) {
+ const r = await p;
+ resolved++;
+ if (r && r.found && r.found.length > 0) {
+ results.push(...r.found.map(b => ({...b, _source: r.src, _elapsed: r.elapsed})));
+ }
+ container.innerHTML = `<div class="result-count">已搜索 ${resolved}/${sources.length} 个书源，找到 ${results.length} 条结果</div>` + renderResults(results);
+ }
+ searchLoading = false;
+ sortResults(results);
+ searchResults = results;
+ container.innerHTML = `<div class="result-count">找到 ${results.length} 本书（${sources.length} 个书源）</div>` + renderResults(results);
 }
 
 function buildSearchUrl(src, keyword) {
-  let url = src.searchUrl || '';
-  if (!url) return null;
-  const encoded = encodeURIComponent(keyword);
-  url = url.replace(/{{key}}/g, encoded).replace(/\{\s*key\s*\}/g, encoded);
-  url = url.replace(/\{keyword\}/g, encoded).replace(/\{\s*keyword\s*\}/g, encoded);
-  return url;
+ let url = src.searchUrl || '';
+ if (!url) return null;
+ const encoded = encodeURIComponent(keyword);
+ url = url.replace(/{{key}}/g, encoded).replace(/\{\s*key\s*\}/g, encoded);
+ url = url.replace(/\{keyword\}/g, encoded).replace(/\{\s*keyword\s*\}/g, encoded);
+ return url;
 }
 
 function parseSearchResults(src, html, keyword, baseUrl) {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const results = [];
-    const rule = src.searchUrl ? extractRule(src.searchUrl) : null;
-    const selectors = {
-      book: src.bookListRule || src.bookListSelector || '.bookbox,.bookitem,.novel-list li,article,.book-item',
-      name: src.bookNameRule || src.bookNameSelector || '.bookname,.title,.book-title,a',
-      author: src.authorRule || src.authorSelector || '.author,.writer',
-      cover: src.coverRule || src.coverSelector || 'img',
-      intro: src.introRule || src.introSelector || '.desc,.intro',
-      detail: src.detailRule || src.detailSelector || ''
-    };
-    let items = doc.querySelectorAll(selectors.book);
-    if (!items.length) {
-      // Try to find common patterns
-      items = doc.querySelectorAll('a[href*="/book/"], a[href*="/novel/"], a[href*="/info/"]');
-    }
-    items.forEach(item => {
-      const nameEl = item.querySelector('.bookname,.title,.book-title') || item;
-      const name = (nameEl.textContent || '').trim();
-      if (!name || name.length < 2) return;
-      const author = (item.querySelector('.author,.writer')?.textContent || '').trim();
-      const cover = item.querySelector('img')?.src || '';
-      const intro = (item.querySelector('.desc,.intro')?.textContent || '').trim();
-      let href = item.getAttribute('href') || '';
-      if (href && !href.startsWith('http') && !href.startsWith('//')) {
-        try {
-          const u = new URL(baseUrl);
-          // Compute directory base: origin + pathname up to last '/'
-          let baseDir = u.origin + '/';
-          if (u.pathname.includes('/')) {
-            const lastSlash = u.pathname.lastIndexOf('/');
-            if (lastSlash > 0) baseDir = u.origin + u.pathname.substring(0, lastSlash + 1);
-          }
-          href = new URL(href, baseDir).href;
-        } catch(e) {
-          if (baseUrl) href = baseUrl + href;
-        }
-      }
-      results.push({
-        id: href,
-        title: cleanText(name),
-        author: cleanText(author),
-        cover,
-        intro: cleanText(intro),
-        sourceId: src._id,
-        sourceName: src.bookSourceName || src.sourceName || '未知书源'
-      });
-    });
-    return results;
-  } catch(e) { return []; }
+ try {
+ const parser = new DOMParser();
+ const doc = parser.parseFromString(html, 'text/html');
+ const results = [];
+ const rule = src.searchUrl ? extractRule(src.searchUrl) : null;
+ const selectors = {
+ book: src.bookListRule || src.bookListSelector || '.bookbox,.bookitem,.novel-list li,article,.book-item',
+ name: src.bookNameRule || src.bookNameSelector || '.bookname,.title,.book-title,a',
+ author: src.authorRule || src.authorSelector || '.author,.writer',
+ cover: src.coverRule || src.coverSelector || 'img',
+ intro: src.introRule || src.introSelector || '.desc,.intro',
+ detail: src.detailRule || src.detailSelector || ''
+ };
+ let items = doc.querySelectorAll(selectors.book);
+ if (!items.length) {
+ // Try to find common patterns
+ items = doc.querySelectorAll('a[href*="/book/"], a[href*="/novel/"], a[href*="/info/"]');
+ }
+ items.forEach(item => {
+ const nameEl = item.querySelector('.bookname,.title,.book-title') || item;
+ const name = (nameEl.textContent || '').trim();
+ if (!name || name.length < 2) return;
+ const author = (item.querySelector('.author,.writer')?.textContent || '').trim();
+ const cover = item.querySelector('img')?.src || '';
+ const intro = (item.querySelector('.desc,.intro')?.textContent || '').trim();
+ const linkEl = item.tagName === 'A' ? item : item.querySelector('a');
+let href = linkEl ? linkEl.getAttribute('href') : '';
+if (!href) {
+ results.push({ title: '⚠ 无链接: ' + (item.className || item.tagName), id: 'javascript:void(0)', sourceId: src._id, sourceName: src.bookSourceName || src.sourceName || '未知书源' });
+ continue;
+}
+ if (href && !href.startsWith('http') && !href.startsWith('//')) {
+ try {
+ const u = new URL(baseUrl);
+ // Compute directory base: origin + pathname up to last '/'
+ let baseDir = u.origin + '/';
+ if (u.pathname.includes('/')) {
+ const lastSlash = u.pathname.lastIndexOf('/');
+ if (lastSlash > 0) baseDir = u.origin + u.pathname.substring(0, lastSlash + 1);
+ }
+ href = new URL(href, baseDir).href;
+ } catch(e) {
+ if (baseUrl) href = baseUrl + href;
+ }
+ }
+ results.push({
+ id: href,
+ title: cleanText(name),
+ author: cleanText(author),
+ cover,
+ intro: cleanText(intro),
+ sourceId: src._id,
+ sourceName: src.bookSourceName || src.sourceName || '未知书源'
+ });
+ });
+ return results;
+ } catch(e) { return []; }
 }
 
 function extractRule(url) {
-  // Extract URL pattern for building dynamic URLs
-  return url;
+ // Extract URL pattern for building dynamic URLs
+ return url;
 }
 
 function cleanText(t) {
-  if (!t) return '';
-  return t.replace(/\s+/g, ' ').replace(/[\r\n]+/g, '').trim().slice(0, 200);
+ if (!t) return '';
+ return t.replace(/\s+/g, ' ').replace(/[\r\n]+/g, '').trim().slice(0, 200);
 }
 
 function escapeHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+ if (!str) return '';
+ return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
 function escapeAttr(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+ if (!str) return '';
+ return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#039;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function renderResults(results) {
-  if (!results.length) return '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">未找到结果</div><div class="empty-desc">试试不同的关键词，或检查书源是否可用</div></div>';
-  return results.map((b, i) => `
-    <div class="book-card" data-index="${i}" onclick="openBookFromSearch(${i})">
-      <div class="book-cover">${b.cover ? `<img src="${b.cover}" onerror="this.parentElement.textContent='📖'">` : '📖'}</div>
-      <div class="book-info">
-        <div class="book-title">${escapeHtml(b.title)}</div>
-        <div class="book-author">${escapeHtml(b.author)}</div>
-        <div class="book-intro">${escapeHtml(b.intro)}</div>
-        <div class="book-meta"><span class="source-tag">${escapeHtml(b.sourceName || '')}</span></div>
-      </div>
-    </div>
-  `).join('');
+ if (!results.length) return '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">未找到结果</div><div class="empty-desc">试试不同的关键词，或检查书源是否可用</div></div>';
+ return results.map((b, i) => `
+ <div class="book-card" data-index="${i}" onclick="openBookFromSearch(${i})">
+ <div class="book-cover">${b.cover ? `<img src="${b.cover}" onerror="this.parentElement.textContent='📖'">` : '📖'}</div>
+ <div class="book-info">
+ <div class="book-title">${escapeHtml(b.title)}</div>
+ <div class="book-author">${escapeHtml(b.author)}</div>
+ <div class="book-intro">${escapeHtml(b.intro)}</div>
+ <div class="book-meta"><span class="source-tag">${escapeHtml(b.sourceName || '')}</span></div>
+ </div>
+ </div>
+ `).join('');
 }
 
 function sortResults(results) {
-  if (currentSort === 'speed') results.sort((a, b) => (a._elapsed || 9999) - (b._elapsed || 9999));
-  else if (currentSort === 'name') results.sort((a, b) => a.title.localeCompare(b.title, 'zh'));
-  else if (currentSort === 'completeness') results.sort((a, b) => (b.intro?.length || 0) - (a.intro?.length || 0));
+ if (currentSort === 'speed') results.sort((a, b) => (a._elapsed || 9999) - (b._elapsed || 9999));
+ else if (currentSort === 'name') results.sort((a, b) => a.title.localeCompare(b.title, 'zh'));
+ else if (currentSort === 'completeness') results.sort((a, b) => (b.intro?.length || 0) - (a.intro?.length || 0));
 }
 
 function openBookFromSearch(index) {
-  const book = searchResults[index];
-  if (book) openBook(book);
+ const book = searchResults[index];
+ if (book) openBook(book);
 }
 
 // ======= OPEN BOOK =======
 async function openBook(book) {
-  currentBook = {...book, id: book.id || ('local_' + Date.now())};
-  const displayUrl = (book.id || '').substring(0, 120);
-  toast('正在加载: ' + displayUrl);
-  try {
-    const src = state.sources.find(s => s._id === book.sourceId);
-    const url = book.id;
-    if (!url) { toast('错误：书籍 URL 为空'); return; }
-    const html = await fetchTextWithProxy(url);
-    if (!html) { toast('获取失败，无内容。'); console.log('openBook: no HTML from', url); chapters = []; return; }
-    console.log('openBook: fetched', html.length, 'bytes from', url);
-    chapters = parseChapters(src, html, book);
-    if (chapters.length === 0) {
-      // Create mock chapters
-      chapters = [{title: '第1章', url: url || '', idx: 0}];
-    }
-    // Find last read chapter
-    const lastRead = state.shelf.find(s => s.id === currentBook.id);
-    currentChapter = lastRead?.lastChapter || 0;
-    // Add to shelf
-    addToShelf(currentBook);
-    // Open reader view
-    openReader(currentBook);
-    // Show chapter list
-    showChapterList();
-    // Load first/continue chapter
-    loadChapter(currentChapter);
-  } catch(e) {
-    console.error('openBook error:', e);
-    toast('加载出错: ' + (e.message || e));
-    chapters = [{title: '第1章', url: '', idx: 0}];
-    addToShelf(currentBook);
-    openReader(currentBook);
-    loadChapter(0);
-  }
+ currentBook = {...book, id: book.id || ('local_' + Date.now())};
+ const displayUrl = (book.id || '').substring(0, 120);
+ toast('正在加载: ' + displayUrl);
+ try {
+ const src = state.sources.find(s => s._id === book.sourceId);
+ const url = book.id;
+ if (!url) { toast('错误：书籍 URL 为空'); return; }
+ const html = await fetchTextWithProxy(url);
+ if (!html) { toast('获取失败，无内容。'); console.log('openBook: no HTML from', url); chapters = []; return; }
+ console.log('openBook: fetched', html.length, 'bytes from', url);
+ chapters = parseChapters(src, html, book);
+ if (chapters.length === 0) {
+ // Create mock chapters
+ chapters = [{title: '第1章', url: url || '', idx: 0}];
+ }
+ // Find last read chapter
+ const lastRead = state.shelf.find(s => s.id === currentBook.id);
+ currentChapter = lastRead?.lastChapter || 0;
+ // Add to shelf
+ addToShelf(currentBook);
+ // Open reader view
+ openReader(currentBook);
+ // Show chapter list
+ showChapterList();
+ // Load first/continue chapter
+ loadChapter(currentChapter);
+ } catch(e) {
+ console.error('openBook error:', e);
+ toast('加载出错: ' + (e.message || e));
+ chapters = [{title: '第1章', url: '', idx: 0}];
+ addToShelf(currentBook);
+ openReader(currentBook);
+ loadChapter(0);
+ }
 }
 
 // ======= CHAPTER PARSING =======
 function parseChapters(src, html, book) {
-  if (!html) return [];
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const rule = src.chapterListRule || src.catalogRule || '';
-    let items = [];
-    if (rule) {
-      // Try CSS selector first
-      const selector = extractCssSelector(rule);
-      if (selector) items = doc.querySelectorAll(selector);
-    }
-    if (!items.length) {
-      // Smarter fallback: find container with most <a> tags
-      const containers = doc.querySelectorAll('div, ul, ol, section, main, article');
-      let bestContainer = null, maxLinks = 0;
-      containers.forEach(c => {
-        const links = c.querySelectorAll('a[href]');
-        if (links.length > maxLinks) { maxLinks = links.length; bestContainer = c; }
-      });
-      if (bestContainer && maxLinks > 3) {
-        items = bestContainer.querySelectorAll('a[href]');
-      } else {
-        // Broad fallback: any link that looks like a chapter
-        items = doc.querySelectorAll('a[href*="chapter"], a[href*="read"], a[href*="/content/"], a[href*="/txt/"], a[href*=".html"], a[href*=".htm"]');
-      }
-    }
-    const chapters = [];
-    let idx = 0;
-    items.forEach(item => {
-      let title = (item.textContent || '').trim();
-      if (!title || title.length < 2) return;
-      let href = item.getAttribute('href') || '';
-      if (href && !href.startsWith('http')) {
-        const base = book.id.substring(0, book.id.lastIndexOf('/') + 1);
-        href = base + href;
-      }
-      chapters.push({title: cleanText(title), url: href, idx: idx++});
-    });
-    return chapters;
-  } catch(e) { return []; }
+ if (!html) return [];
+ try {
+ const parser = new DOMParser();
+ const doc = parser.parseFromString(html, 'text/html');
+ const rule = src.chapterListRule || src.catalogRule || '';
+ let items = [];
+ if (rule) {
+ // Try CSS selector first
+ const selector = extractCssSelector(rule);
+ if (selector) items = doc.querySelectorAll(selector);
+ }
+ if (!items.length) {
+ // Smarter fallback: find container with most <a> tags
+ const containers = doc.querySelectorAll('div, ul, ol, section, main, article');
+ let bestContainer = null, maxLinks = 0;
+ containers.forEach(c => {
+ const links = c.querySelectorAll('a[href]');
+ if (links.length > maxLinks) { maxLinks = links.length; bestContainer = c; }
+ });
+ if (bestContainer && maxLinks > 3) {
+ items = bestContainer.querySelectorAll('a[href]');
+ } else {
+ // Broad fallback: any link that looks like a chapter
+ items = doc.querySelectorAll('a[href*="chapter"], a[href*="read"], a[href*="/content/"], a[href*="/txt/"], a[href*=".html"], a[href*=".htm"]');
+ }
+ }
+ const chapters = [];
+ let idx = 0;
+ items.forEach(item => {
+ let title = (item.textContent || '').trim();
+ if (!title || title.length < 2) return;
+ let href = item.getAttribute('href') || '';
+ if (href && !href.startsWith('http')) {
+ const base = book.id.substring(0, book.id.lastIndexOf('/') + 1);
+ href = base + href;
+ }
+ chapters.push({title: cleanText(title), url: href, idx: idx++});
+ });
+ return chapters;
+ } catch(e) { return []; }
 }
 
 function extractCssSelector(rule) {
-  if (!rule) return null;
-  // @css:selector
-  const cssMatch = rule.match(/@css:(.+?)(?:@|$)/);
-  if (cssMatch) return cssMatch[1].trim();
-  // class.xxx or class.xxx@tag.yyy
-  if (rule.startsWith('class.')) {
-    let r = rule.replace('class.', '.');
-    const tagParts = r.match(/@tag\.([a-z]+)/g);
-    if (tagParts) {
-      r = r.split('@')[0];
-      tagParts.forEach(p => { r += ' ' + p.replace('@tag.', ''); });
-    }
-    return r.trim();
-  }
-  // id.xxx
-  if (rule.startsWith('id.')) return '#' + rule.slice(3);
-  // tag.xxx
-  if (rule.startsWith('tag.')) return rule.slice(4);
-  // Strip Legado inner rules, keep CSS-like part
-  const stripped = rule.replace(/@[a-zA-Z]+\.[^@]*/g, '').trim();
-  return stripped || null;
+ if (!rule) return null;
+ // @css:selector
+ const cssMatch = rule.match(/@css:(.+?)(?:@|$)/);
+ if (cssMatch) return cssMatch[1].trim();
+ // class.xxx or class.xxx@tag.yyy
+ if (rule.startsWith('class.')) {
+ let r = rule.replace('class.', '.');
+ const tagParts = r.match(/@tag\.([a-z]+)/g);
+ if (tagParts) {
+ r = r.split('@')[0];
+ tagParts.forEach(p => { r += ' ' + p.replace('@tag.', ''); });
+ }
+ return r.trim();
+ }
+ // id.xxx
+ if (rule.startsWith('id.')) return '#' + rule.slice(3);
+ // tag.xxx
+ if (rule.startsWith('tag.')) return rule.slice(4);
+ // Strip Legado inner rules, keep CSS-like part
+ const stripped = rule.replace(/@[a-zA-Z]+\.[^@]*/g, '').trim();
+ return stripped || null;
 }
 
 // ======= READER =======
 function loadChapter(idx) {
-  if (idx < 0 || idx >= chapters.length) return;
-  currentChapter = idx;
-  const chapter = chapters[idx];
-  document.getElementById('reader-chapter-name').textContent = chapter.title;
-  document.getElementById('reader-content').innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
-  if (!chapter.url) {
-    document.getElementById('reader-content').innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:40px">暂无内容</p>';
-    return;
-  }
-  fetchChapterContent(chapter.url, idx).then(content => {
-    document.getElementById('reader-content').innerHTML = `<div class="chapter-content">${content}</div>`;
-    scrollReaderTo(0);
-    updateReadProgress();
-    recordReadStat(content.length);
-    updateChapterReadStatus(idx);
-    autoSavePosition();
-  }).catch(() => {
-    document.getElementById('reader-content').innerHTML = '<p style="color:var(--accent);text-align:center;padding:40px">加载失败，请检查网络或换源</p>';
-  });
+ if (idx < 0 || idx >= chapters.length) return;
+ currentChapter = idx;
+ const chapter = chapters[idx];
+ document.getElementById('reader-chapter-name').textContent = chapter.title;
+ document.getElementById('reader-content').innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
+ if (!chapter.url) {
+ document.getElementById('reader-content').innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:40px">暂无内容</p>';
+ return;
+ }
+ fetchChapterContent(chapter.url, idx).then(content => {
+ document.getElementById('reader-content').innerHTML = `<div class="chapter-content">${content}</div>`;
+ scrollReaderTo(0);
+ updateReadProgress();
+ recordReadStat(content.length);
+ updateChapterReadStatus(idx);
+ autoSavePosition();
+ }).catch(() => {
+ document.getElementById('reader-content').innerHTML = '<p style="color:var(--accent);text-align:center;padding:40px">加载失败，请检查网络或换源</p>';
+ });
 }
 
 async function fetchChapterContent(url, idx) {
-  const html = await fetchTextWithProxy(url);
-  if (!html) throw new Error('No content');
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  // Try common content selectors
-  const selectors = ['#content,.content,.novel-content,.read-content', '.article-content', '.chapter-content', '#chapter-content', '.text-content'];
-  for (const sel of selectors) {
-    const el = doc.querySelector(sel);
-    if (el) {
-      let text = el.innerHTML;
-      // Clean HTML tags but preserve paragraphs
-      text = text.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n');
-      text = text.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n));
-      text = text.split('\n').map(l => l.trim()).filter(l => l.length > 0).join('<br><br>');
-      return text || '<p style="color:var(--text-secondary)">内容为空</p>';
-    }
-  }
-  // Fallback: body text
-  let text = doc.body.innerText || doc.body.textContent || '';
-  text = text.replace(/\s+/g, ' ').trim();
-  return text ? `<p>${text.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>` : '<p style="color:var(--text-secondary)">无法解析内容</p>';
+ const html = await fetchTextWithProxy(url);
+ if (!html) throw new Error('No content');
+ const parser = new DOMParser();
+ const doc = parser.parseFromString(html, 'text/html');
+ // Try common content selectors
+ const selectors = ['#content,.content,.novel-content,.read-content', '.article-content', '.chapter-content', '#chapter-content', '.text-content'];
+ for (const sel of selectors) {
+ const el = doc.querySelector(sel);
+ if (el) {
+ let text = el.innerHTML;
+ // Clean HTML tags but preserve paragraphs
+ text = text.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n');
+ text = text.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(n));
+ text = text.split('\n').map(l => l.trim()).filter(l => l.length > 0).join('<br><br>');
+ return text || '<p style="color:var(--text-secondary)">内容为空</p>';
+ }
+ }
+ // Fallback: body text
+ let text = doc.body.innerText || doc.body.textContent || '';
+ text = text.replace(/\s+/g, ' ').trim();
+ return text ? `<p>${text.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>` : '<p style="color:var(--text-secondary)">无法解析内容</p>';
 }
 
 function prevChapter() { loadChapter(currentChapter - 1); }
 function nextChapter() { loadChapter(currentChapter + 1); }
 
 function scrollReaderTo(pos) {
-  const el = document.getElementById('reader-content');
-  el.scrollTop = pos;
+ const el = document.getElementById('reader-content');
+ el.scrollTop = pos;
 }
 
 function onReaderScroll() {
-  const el = document.getElementById('reader-content');
-  const max = el.scrollHeight - el.clientHeight;
-  const pct = max > 0 ? Math.round((el.scrollTop / max) * 100) : 0;
-  document.getElementById('reader-progress-text').textContent = pct + '%';
+ const el = document.getElementById('reader-content');
+ const max = el.scrollHeight - el.clientHeight;
+ const pct = max > 0 ? Math.round((el.scrollTop / max) * 100) : 0;
+ document.getElementById('reader-progress-text').textContent = pct + '%';
 }
 
 function updateReadProgress() {
-  const el = document.getElementById('reader-content');
-  const max = el.scrollHeight - el.clientHeight;
-  const pct = max > 0 ? Math.round((el.scrollTop / max) * 100) : 0;
-  document.getElementById('reader-progress-text').textContent = pct + '%';
+ const el = document.getElementById('reader-content');
+ const max = el.scrollHeight - el.clientHeight;
+ const pct = max > 0 ? Math.round((el.scrollTop / max) * 100) : 0;
+ document.getElementById('reader-progress-text').textContent = pct + '%';
 }
 
 function updateChapterReadStatus(idx) {
-  // Update shelf with current chapter
-  const shelfItem = state.shelf.find(s => s.id === currentBook.id);
-  if (shelfItem) {
-    shelfItem.lastChapter = idx;
-    shelfItem.lastRead = Date.now();
-    shelfItem.totalChapters = chapters.length;
-    shelfItem.progress = Math.round((idx / chapters.length) * 100);
-    saveState();
-    renderShelf();
-  }
+ // Update shelf with current chapter
+ const shelfItem = state.shelf.find(s => s.id === currentBook.id);
+ if (shelfItem) {
+ shelfItem.lastChapter = idx;
+ shelfItem.lastRead = Date.now();
+ shelfItem.totalChapters = chapters.length;
+ shelfItem.progress = Math.round((idx / chapters.length) * 100);
+ saveState();
+ renderShelf();
+ }
 }
 
 function autoSavePosition() {
-  // Save scroll position for auto-restore
-  const shelfItem = state.shelf.find(s => s.id === currentBook.id);
-  if (shelfItem) {
-    shelfItem.lastScroll = document.getElementById('reader-content').scrollTop;
-    saveState();
-  }
+ // Save scroll position for auto-restore
+ const shelfItem = state.shelf.find(s => s.id === currentBook.id);
+ if (shelfItem) {
+ shelfItem.lastScroll = document.getElementById('reader-content').scrollTop;
+ saveState();
+ }
 }
 
 // ======= BOOKMARKS =======
 function toggleBookmark() {
-  if (!currentBook) return;
-  const bookId = currentBook.id;
-  const bookmark = state.bookmarks.find(b => b.bookId === bookId && b.chapterIdx === currentChapter);
-  const btn = document.getElementById('bookmark-btn');
-  if (bookmark) {
-    state.bookmarks = state.bookmarks.filter(b => b !== bookmark);
-    btn.textContent = '🔖 书签';
-    toast('已移除书签');
-  } else {
-    state.bookmarks.push({
-      bookId, chapterIdx: currentChapter,
-      chapterTitle: chapters[currentChapter]?.title || '',
-      bookTitle: currentBook.title,
-      scrollTop: document.getElementById('reader-content').scrollTop,
-      time: Date.now()
-    });
-    btn.textContent = '✅ 已书签';
-    toast('已添加书签');
-  }
-  saveState();
+ if (!currentBook) return;
+ const bookId = currentBook.id;
+ const bookmark = state.bookmarks.find(b => b.bookId === bookId && b.chapterIdx === currentChapter);
+ const btn = document.getElementById('bookmark-btn');
+ if (bookmark) {
+ state.bookmarks = state.bookmarks.filter(b => b !== bookmark);
+ btn.textContent = '🔖 书签';
+ toast('已移除书签');
+ } else {
+ state.bookmarks.push({
+ bookId, chapterIdx: currentChapter,
+ chapterTitle: chapters[currentChapter]?.title || '',
+ bookTitle: currentBook.title,
+ scrollTop: document.getElementById('reader-content').scrollTop,
+ time: Date.now()
+ });
+ btn.textContent = '✅ 已书签';
+ toast('已添加书签');
+ }
+ saveState();
 }
 
 function checkBookmarkStatus() {
-  const bookmark = state.bookmarks.find(b => b.bookId === currentBook?.id && b.chapterIdx === currentChapter);
-  const btn = document.getElementById('bookmark-btn');
-  if (btn) btn.textContent = bookmark ? '✅ 已书签' : '🔖 书签';
+ const bookmark = state.bookmarks.find(b => b.bookId === currentBook?.id && b.chapterIdx === currentChapter);
+ const btn = document.getElementById('bookmark-btn');
+ if (btn) btn.textContent = bookmark ? '✅ 已书签' : '🔖 书签';
 }
 
 // ======= CHAPTER LIST =======
 function showChapterList() {
-  const list = document.getElementById('chapter-list');
-  if (!chapters.length) {
-    list.innerHTML = '<div class="empty-state"><div>暂无目录</div></div>';
-  } else {
-    const lastRead = state.shelf.find(s => s.id === currentBook?.id);
-    list.innerHTML = chapters.map((c, i) => `
-      <div class="chapter-item ${i === currentChapter ? 'current' : ''} ${i < (lastRead?.lastChapter || 0) ? 'read' : ''}" onclick="gotoChapter(${i})">
-        <span>${c.title}</span>
-        <span style="font-size:11px;color:var(--text-secondary)">${i + 1}/${chapters.length}</span>
-      </div>
-    `).join('');
-  }
-  showModal('chapters-modal');
+ const list = document.getElementById('chapter-list');
+ if (!chapters.length) {
+ list.innerHTML = '<div class="empty-state"><div>暂无目录</div></div>';
+ } else {
+ const lastRead = state.shelf.find(s => s.id === currentBook?.id);
+ list.innerHTML = chapters.map((c, i) => `
+ <div class="chapter-item ${i === currentChapter ? 'current' : ''} ${i < (lastRead?.lastChapter || 0) ? 'read' : ''}" onclick="gotoChapter(${i})">
+ <span>${c.title}</span>
+ <span style="font-size:11px;color:var(--text-secondary)">${i + 1}/${chapters.length}</span>
+ </div>
+ `).join('');
+ }
+ showModal('chapters-modal');
 }
 
 function gotoChapter(idx) {
-  hideModal('chapters-modal');
-  loadChapter(idx);
+ hideModal('chapters-modal');
+ loadChapter(idx);
 }
 
 // ======= TTS =======
 function toggleTTS() {
-  if (ttsActive) {
-    stopTTS();
-  } else {
-    startTTS();
-  }
+ if (ttsActive) {
+ stopTTS();
+ } else {
+ startTTS();
+ }
 }
 
 function startTTS() {
-  if (!('speechSynthesis' in window)) { toast('您的浏览器不支持语音朗读'); return; }
-  const content = document.getElementById('reader-content').innerText;
-  if (!content || content.length < 10) { toast('暂无内容可朗读'); return; }
-  stopTTS();
-  ttsUtterance = new SpeechSynthesisUtterance(content);
-  ttsUtterance.lang = 'zh-CN';
-  ttsUtterance.rate = 1.0;
-  ttsUtterance.pitch = 1.0;
-  ttsUtterance.onend = () => { ttsActive = false; toast('朗读结束'); };
-  ttsUtterance.onerror = () => { ttsActive = false; };
-  speechSynthesis.speak(ttsUtterance);
-  ttsActive = true;
-  toast('开始朗读...');
+ if (!('speechSynthesis' in window)) { toast('您的浏览器不支持语音朗读'); return; }
+ const content = document.getElementById('reader-content').innerText;
+ if (!content || content.length < 10) { toast('暂无内容可朗读'); return; }
+ stopTTS();
+ ttsUtterance = new SpeechSynthesisUtterance(content);
+ ttsUtterance.lang = 'zh-CN';
+ ttsUtterance.rate = 1.0;
+ ttsUtterance.pitch = 1.0;
+ ttsUtterance.onend = () => { ttsActive = false; toast('朗读结束'); };
+ ttsUtterance.onerror = () => { ttsActive = false; };
+ speechSynthesis.speak(ttsUtterance);
+ ttsActive = true;
+ toast('开始朗读...');
 }
 
 function stopTTS() {
-  if (speechSynthesis) speechSynthesis.cancel();
-  ttsActive = false;
+ if (speechSynthesis) speechSynthesis.cancel();
+ ttsActive = false;
 }
 
 // ======= READER SETTINGS =======
 function toggleReaderSettings() {
-  document.getElementById('reader-settings').classList.toggle('show');
+ document.getElementById('reader-settings').classList.toggle('show');
 }
 
 function changeFontSize(size) {
-  document.getElementById('reader-content').style.fontSize = size + 'px';
-  document.getElementById('font-size-val').textContent = size;
-  state.settings.fontSize = parseInt(size);
-  saveState();
+ document.getElementById('reader-content').style.fontSize = size + 'px';
+ document.getElementById('font-size-val').textContent = size;
+ state.settings.fontSize = parseInt(size);
+ saveState();
 }
 
 function changeLineHeight(lh, btn) {
-  document.getElementById('reader-content').style.lineHeight = lh;
-  document.querySelectorAll('.font-opt').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  state.settings.lineHeight = lh;
-  saveState();
+ document.getElementById('reader-content').style.lineHeight = lh;
+ document.querySelectorAll('.font-opt').forEach(b => b.classList.remove('active'));
+ btn.classList.add('active');
+ state.settings.lineHeight = lh;
+ saveState();
 }
 
 function changeReaderTheme(theme, btn) {
-  document.querySelectorAll('.bg-opt').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  // Apply theme to reader
-  const themes = {
-    dark: { bg: '#1a1a2e', text: '#e8e8e8' },
-    light: { bg: '#f5f5f0', text: '#1a1a1a' },
-    sepia: { bg: '#f4ecd8', text: '#5b4636' },
-    black: { bg: '#0d0d0d', text: '#d0d0d0' }
-  };
-  const t = themes[theme] || themes.dark;
-  document.getElementById('reader-content').style.background = t.bg;
-  document.getElementById('reader-content').style.color = t.text;
-  state.settings.readerTheme = theme;
-  saveState();
+ document.querySelectorAll('.bg-opt').forEach(b => b.classList.remove('active'));
+ btn.classList.add('active');
+ // Apply theme to reader
+ const themes = {
+ dark: { bg: '#1a1a2e', text: '#e8e8e8' },
+ light: { bg: '#f5f5f0', text: '#1a1a1a' },
+ sepia: { bg: '#f4ecd8', text: '#5b4636' },
+ black: { bg: '#0d0d0d', text: '#d0d0d0' }
+ };
+ const t = themes[theme] || themes.dark;
+ document.getElementById('reader-content').style.background = t.bg;
+ document.getElementById('reader-content').style.color = t.text;
+ state.settings.readerTheme = theme;
+ saveState();
 }
 
 function openReader(book) {
-  // Book could be shelf item or search result
-  const shelfItem = state.shelf.find(s => s.id === book.id);
-  if (shelfItem) {
-    currentBook = shelfItem;
-  } else {
-    currentBook = {...book, id: book.id || ('local_' + Date.now())};
-    addToShelf(currentBook);
-  }
-  // Restore reader settings
-  document.getElementById('reader-content').style.fontSize = state.settings.fontSize + 'px';
-  document.getElementById('reader-content').style.lineHeight = state.settings.lineHeight;
-  changeReaderTheme(state.settings.readerTheme, document.querySelector('.bg-opt'));
-  document.getElementById('reader-view').classList.add('active');
-  document.getElementById('reader-title').textContent = currentBook.title;
-  // Load or show chapter list
-  if (chapters.length > 0) {
-    const lastChapter = shelfItem?.lastChapter || 0;
-    loadChapter(lastChapter);
-  }
-  checkBookmarkStatus();
+ // Book could be shelf item or search result
+ const shelfItem = state.shelf.find(s => s.id === book.id);
+ if (shelfItem) {
+ currentBook = shelfItem;
+ } else {
+ currentBook = {...book, id: book.id || ('local_' + Date.now())};
+ addToShelf(currentBook);
+ }
+ // Restore reader settings
+ document.getElementById('reader-content').style.fontSize = state.settings.fontSize + 'px';
+ document.getElementById('reader-content').style.lineHeight = state.settings.lineHeight;
+ changeReaderTheme(state.settings.readerTheme, document.querySelector('.bg-opt'));
+ document.getElementById('reader-view').classList.add('active');
+ document.getElementById('reader-title').textContent = currentBook.title;
+ // Load or show chapter list
+ if (chapters.length > 0) {
+ const lastChapter = shelfItem?.lastChapter || 0;
+ loadChapter(lastChapter);
+ }
+ checkBookmarkStatus();
 }
 
 function closeReader() {
-  // Save position before closing
-  autoSavePosition();
-  document.getElementById('reader-view').classList.remove('active');
-  stopTTS();
+ // Save position before closing
+ autoSavePosition();
+ document.getElementById('reader-view').classList.remove('active');
+ stopTTS();
 }
 
 // ======= SHELF =======
 function addToShelf(book) {
-  const exists = state.shelf.find(s => s.id === book.id);
-  if (!exists) {
-    state.shelf.unshift({
-      id: book.id,
-      title: book.title,
-      author: book.author,
-      cover: book.cover,
-      sourceId: book.sourceId,
-      sourceName: book.sourceName,
-      addedTime: Date.now(),
-      lastRead: Date.now(),
-      lastChapter: 0,
-      totalChapters: 0,
-      progress: 0
-    });
-    // Add to history
-    state.history.unshift({ id: book.id, title: book.title, author: book.author, cover: book.cover, time: Date.now() });
-    if (state.history.length > 100) state.history = state.history.slice(0, 100);
-    saveState();
-    renderShelf();
-  } else {
-    exists.lastRead = Date.now();
-    saveState();
-  }
+ const exists = state.shelf.find(s => s.id === book.id);
+ if (!exists) {
+ state.shelf.unshift({
+ id: book.id,
+ title: book.title,
+ author: book.author,
+ cover: book.cover,
+ sourceId: book.sourceId,
+ sourceName: book.sourceName,
+ addedTime: Date.now(),
+ lastRead: Date.now(),
+ lastChapter: 0,
+ totalChapters: 0,
+ progress: 0
+ });
+ // Add to history
+ state.history.unshift({ id: book.id, title: book.title, author: book.author, cover: book.cover, time: Date.now() });
+ if (state.history.length > 100) state.history = state.history.slice(0, 100);
+ saveState();
+ renderShelf();
+ } else {
+ exists.lastRead = Date.now();
+ saveState();
+ }
 }
 
 function renderShelf() {
-  const content = document.getElementById('shelf-content');
-  if (!content) return;
-  if (!state.shelf.length) {
-    content.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">📚</div>
-        <div class="empty-title">书架空空如也</div>
-        <div class="empty-desc">去「发现」搜索书籍，或导入本地文件</div>
-      </div>`;
-    return;
-  }
-  content.innerHTML = `
-    <div class="shelf-grid">
-      ${state.shelf.map(book => `
-        <div class="shelf-item" onclick="openReader(${escapeAttr(JSON.stringify(book))})">
-          <div class="shelf-cover">
-            ${book.cover ? `<img src="${book.cover}" onerror="this.parentElement.textContent='📖'">` : '📖'}
-            ${book.progress > 0 ? `<span class="shelf-badge">${book.progress}%</span>` : ''}
-          </div>
-          <div class="shelf-title">${escapeHtml(book.title)}</div>
-        </div>
-      `).join('')}
-    </div>
-  `;
+ const content = document.getElementById('shelf-content');
+ if (!content) return;
+ if (!state.shelf.length) {
+ content.innerHTML = `
+ <div class="empty-state">
+ <div class="empty-icon">📚</div>
+ <div class="empty-title">书架空空如也</div>
+ <div class="empty-desc">去「发现」搜索书籍，或导入本地文件</div>
+ </div>`;
+ return;
+ }
+ content.innerHTML = `
+ <div class="shelf-grid">
+ ${state.shelf.map(book => `
+ <div class="shelf-item" onclick="openReader(${escapeAttr(JSON.stringify(book))})">
+ <div class="shelf-cover">
+ ${book.cover ? `<img src="${book.cover}" onerror="this.parentElement.textContent='📖'">` : '📖'}
+ ${book.progress > 0 ? `<span class="shelf-badge">${book.progress}%</span>` : ''}
+ </div>
+ <div class="shelf-title">${escapeHtml(book.title)}</div>
+ </div>
+ `).join('')}
+ </div>
+ `;
 }
 
 function removeFromShelf(bookId) {
-  state.shelf = state.shelf.filter(b => b.id !== bookId);
-  saveState();
-  renderShelf();
-  toast('已从书架移除');
+ state.shelf = state.shelf.filter(b => b.id !== bookId);
+ saveState();
+ renderShelf();
+ toast('已从书架移除');
 }
 
 // ======= SOURCES MANAGER =======
 function renderSources() {
-  const content = document.getElementById('sources-content');
-  if (!content) return;
-  if (!state.sources.length) {
-    content.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">⚡</div>
-        <div class="empty-title">还没有书源</div>
-        <div class="empty-desc">点击右上角 + 导入书源 JSON</div>
-      </div>`;
-    return;
-  }
-  content.innerHTML = `
-    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">
-      共 ${state.sources.length} 个书源，已启用 ${state.enabledSources.size} 个
-    </div>
-    <div style="margin-bottom:12px;display:flex;gap:8px">
-      <button onclick="enableAllSources()" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--accent);cursor:pointer;font-size:13px">全启用</button>
-      <button onclick="disableAllSources()" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--text-secondary);cursor:pointer;font-size:13px">全禁用</button>
-      <button onclick="testAllSources()" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--accent);cursor:pointer;font-size:13px">测速</button>
-    </div>
-    ${state.sources.map((src, i) => {
-      const name = src.bookSourceName || src.sourceName || src.sourceUrl || `书源${i+1}`;
-      const enabled = state.enabledSources.has(src._id);
-      return `
-        <div class="source-item">
-          <button class="toggle ${enabled ? 'active' : ''}" onclick="toggleSource('${escapeAttr(src._id)}')"></button>
-          <div class="source-name">
-            <div>${escapeHtml(name)}</div>
-            <div class="source-count">${src.bookSourceUrl || src.sourceUrl || ''}</div>
-          </div>
-          <button class="icon-btn" style="font-size:14px;color:var(--accent)" onclick="testSource(${i})">⚡</button>
-        </div>
-      `;
-    }).join('')}
-  `;
+ const content = document.getElementById('sources-content');
+ if (!content) return;
+ if (!state.sources.length) {
+ content.innerHTML = `
+ <div class="empty-state">
+ <div class="empty-icon">⚡</div>
+ <div class="empty-title">还没有书源</div>
+ <div class="empty-desc">点击右上角 + 导入书源 JSON</div>
+ </div>`;
+ return;
+ }
+ content.innerHTML = `
+ <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">
+ 共 ${state.sources.length} 个书源，已启用 ${state.enabledSources.size} 个
+ </div>
+ <div style="margin-bottom:12px;display:flex;gap:8px">
+ <button onclick="enableAllSources()" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--accent);cursor:pointer;font-size:13px">全启用</button>
+ <button onclick="disableAllSources()" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--text-secondary);cursor:pointer;font-size:13px">全禁用</button>
+ <button onclick="testAllSources()" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:8px;background:none;color:var(--accent);cursor:pointer;font-size:13px">测速</button>
+ </div>
+ ${state.sources.map((src, i) => {
+ const name = src.bookSourceName || src.sourceName || src.sourceUrl || `书源${i+1}`;
+ const enabled = state.enabledSources.has(src._id);
+ return `
+ <div class="source-item">
+ <button class="toggle ${enabled ? 'active' : ''}" onclick="toggleSource('${escapeAttr(src._id)}')"></button>
+ <div class="source-name">
+ <div>${escapeHtml(name)}</div>
+ <div class="source-count">${src.bookSourceUrl || src.sourceUrl || ''}</div>
+ </div>
+ <button class="icon-btn" style="font-size:14px;color:var(--accent)" onclick="testSource(${i})">⚡</button>
+ </div>
+ `;
+ }).join('')}
+ `;
 }
 
 function toggleSource(id) {
-  if (state.enabledSources.has(id)) {
-    state.enabledSources.delete(id);
-  } else {
-    state.enabledSources.add(id);
-  }
-  saveState();
-  renderSources();
+ if (state.enabledSources.has(id)) {
+ state.enabledSources.delete(id);
+ } else {
+ state.enabledSources.add(id);
+ }
+ saveState();
+ renderSources();
 }
 
 function enableAllSources() {
-  state.enabledSources = new Set(state.sources.map(s => s._id));
-  saveState();
-  renderSources();
-  toast('已启用全部书源');
+ state.enabledSources = new Set(state.sources.map(s => s._id));
+ saveState();
+ renderSources();
+ toast('已启用全部书源');
 }
 
 function disableAllSources() {
-  state.enabledSources.clear();
-  saveState();
-  renderSources();
-  toast('已禁用全部书源');
+ state.enabledSources.clear();
+ saveState();
+ renderSources();
+ toast('已禁用全部书源');
 }
 
 async function testSource(idx) {
-  const src = state.sources[idx];
-  if (!src || !src.searchUrl) { toast('该书源无可用搜索链接'); return; }
-  const start = Date.now();
-  toast('测试中...');
-  try {
-    const url = buildSearchUrl(src, '斗罗大陆');
-    if (!url) throw new Error('No URL');
-    await fetchTextWithProxy(url);
-    const elapsed = Date.now() - start;
-    toast(`${src.bookSourceName || '书源' + (idx+1)}: ${elapsed}ms`);
-  } catch(e) {
-    toast(`测试失败: ${e.message}`);
-  }
+ const src = state.sources[idx];
+ if (!src || !src.searchUrl) { toast('该书源无可用搜索链接'); return; }
+ const start = Date.now();
+ toast('测试中...');
+ try {
+ const url = buildSearchUrl(src, '斗罗大陆');
+ if (!url) throw new Error('No URL');
+ await fetchTextWithProxy(url);
+ const elapsed = Date.now() - start;
+ toast(`${src.bookSourceName || '书源' + (idx+1)}: ${elapsed}ms`);
+ } catch(e) {
+ toast(`测试失败: ${e.message}`);
+ }
 }
 
 async function testAllSources() {
-  toast('批量测速中...');
-  const enabled = state.sources.filter(s => state.enabledSources.has(s._id) && s.searchUrl);
-  let done = 0;
-  for (const src of enabled) {
-    try {
-      const url = buildSearchUrl(src, '斗罗大陆');
-      const start = Date.now();
-      await fetchTextWithProxy(url);
-      src._elapsed = Date.now() - start;
-    } catch { src._elapsed = 99999; }
-    done++;
-  }
-  // Sort by speed
-  enabled.sort((a, b) => (a._elapsed || 99999) - (b._elapsed || 99999));
-  toast(`测速完成！最快: ${enabled[0]?.bookSourceName || '未知'} (${enabled[0]?._elapsed}ms)`);
-  renderSources();
+ toast('批量测速中...');
+ const enabled = state.sources.filter(s => state.enabledSources.has(s._id) && s.searchUrl);
+ let done = 0;
+ for (const src of enabled) {
+ try {
+ const url = buildSearchUrl(src, '斗罗大陆');
+ const start = Date.now();
+ await fetchTextWithProxy(url);
+ src._elapsed = Date.now() - start;
+ } catch { src._elapsed = 99999; }
+ done++;
+ }
+ // Sort by speed
+ enabled.sort((a, b) => (a._elapsed || 99999) - (b._elapsed || 99999));
+ toast(`测速完成！最快: ${enabled[0]?.bookSourceName || '未知'} (${enabled[0]?._elapsed}ms)`);
+ renderSources();
 }
 
 // ======= LOCAL FILE IMPORT =======
 function showImportFile() {
-  document.getElementById('hidden-file-input').click();
+ document.getElementById('hidden-file-input').click();
 }
 
 document.getElementById('hidden-file-input')?.addEventListener('change', async function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const name = file.name.toLowerCase();
-  toast('正在解析: ' + file.name);
-  try {
-    const text = await file.text();
-    if (name.endsWith('.txt')) {
-      importTxtFile(file.name, text);
-    } else if (name.endsWith('.epub')) {
-      importEpubFile(file.name, text);
-    } else {
-      toast('不支持的文件格式');
-    }
-  } catch(err) {
-    toast('文件读取失败: ' + err.message);
-  }
-  e.target.value = '';
+ const file = e.target.files[0];
+ if (!file) return;
+ const name = file.name.toLowerCase();
+ toast('正在解析: ' + file.name);
+ try {
+ const text = await file.text();
+ if (name.endsWith('.txt')) {
+ importTxtFile(file.name, text);
+ } else if (name.endsWith('.epub')) {
+ importEpubFile(file.name, text);
+ } else {
+ toast('不支持的文件格式');
+ }
+ } catch(err) {
+ toast('文件读取失败: ' + err.message);
+ }
+ e.target.value = '';
 });
 
 function importTxtFile(filename, content) {
-  // Parse basic structure - try to detect chapters
-  const lines = content.split('\n');
-  const chapters = [];
-  let currentChapter = { title: filename.replace('.txt', ''), content: [] };
-  let chapterCount = 0;
-  for (const line of lines) {
-    const trimmed = line.trim();
-    // Detect chapter headings (various patterns)
-    if (/^(第[一二三四五六七八九十百千\d]+章)/.test(trimmed) ||
-        /^(Chapter|chapters?|第)\s*\d/i.test(trimmed) ||
-        /^[〇零一二三四五六七八九十百千\d]{1,4}\.\s/.test(trimmed) ||
-        /^第[一二三四五六七八九十百千\d]+[章节卷集]/.test(trimmed)) {
-      if (currentChapter.content.length > 0 || chapterCount === 0) {
-        if (chapterCount === 0) {
-          currentChapter.content.push(trimmed);
-        } else {
-          chapters.push({...currentChapter});
-          currentChapter = { title: trimmed, content: [] };
-        }
-        chapterCount++;
-      } else {
-        currentChapter.content.push(trimmed);
-      }
-    } else {
-      currentChapter.content.push(trimmed);
-    }
-  }
-  if (currentChapter.content.length > 0) {
-    chapters.push(currentChapter);
-  }
-  if (chapters.length === 0) {
-    chapters.push({ title: '全文', content: lines.filter(l => l.trim()).slice(0, 500) });
-  }
-  const bookId = 'local_' + Date.now();
-  const book = {
-    id: bookId,
-    title: filename.replace('.txt', ''),
-    author: '未知作者',
-    cover: '',
-    sourceId: 'local',
-    isLocal: true,
-    chapters: chapters.map((c, i) => ({ title: c.title, idx: i })),
-    content: chapters
-  };
-  state.shelf.unshift({
-    id: bookId,
-    title: book.title,
-    author: book.author,
-    cover: '',
-    sourceId: 'local',
-    sourceName: '本地文件',
-    addedTime: Date.now(),
-    lastRead: Date.now(),
-    lastChapter: 0,
-    totalChapters: chapters.length,
-    progress: 0,
-    isLocal: true,
-    _localBook: book
-  });
-  state.history.unshift({ id: bookId, title: book.title, time: Date.now() });
-  saveState();
-  renderShelf();
-  toast(`导入成功！共 ${chapters.length} 章`);
+ // Parse basic structure - try to detect chapters
+ const lines = content.split('\n');
+ const chapters = [];
+ let currentChapter = { title: filename.replace('.txt', ''), content: [] };
+ let chapterCount = 0;
+ for (const line of lines) {
+ const trimmed = line.trim();
+ // Detect chapter headings (various patterns)
+ if (/^(第[一二三四五六七八九十百千\d]+章)/.test(trimmed) ||
+ /^(Chapter|chapters?|第)\s*\d/i.test(trimmed) ||
+ /^[〇零一二三四五六七八九十百千\d]{1,4}\.\s/.test(trimmed) ||
+ /^第[一二三四五六七八九十百千\d]+[章节卷集]/.test(trimmed)) {
+ if (currentChapter.content.length > 0 || chapterCount === 0) {
+ if (chapterCount === 0) {
+ currentChapter.content.push(trimmed);
+ } else {
+ chapters.push({...currentChapter});
+ currentChapter = { title: trimmed, content: [] };
+ }
+ chapterCount++;
+ } else {
+ currentChapter.content.push(trimmed);
+ }
+ } else {
+ currentChapter.content.push(trimmed);
+ }
+ }
+ if (currentChapter.content.length > 0) {
+ chapters.push(currentChapter);
+ }
+ if (chapters.length === 0) {
+ chapters.push({ title: '全文', content: lines.filter(l => l.trim()).slice(0, 500) });
+ }
+ const bookId = 'local_' + Date.now();
+ const book = {
+ id: bookId,
+ title: filename.replace('.txt', ''),
+ author: '未知作者',
+ cover: '',
+ sourceId: 'local',
+ isLocal: true,
+ chapters: chapters.map((c, i) => ({ title: c.title, idx: i })),
+ content: chapters
+ };
+ state.shelf.unshift({
+ id: bookId,
+ title: book.title,
+ author: book.author,
+ cover: '',
+ sourceId: 'local',
+ sourceName: '本地文件',
+ addedTime: Date.now(),
+ lastRead: Date.now(),
+ lastChapter: 0,
+ totalChapters: chapters.length,
+ progress: 0,
+ isLocal: true,
+ _localBook: book
+ });
+ state.history.unshift({ id: bookId, title: book.title, time: Date.now() });
+ saveState();
+ renderShelf();
+ toast(`导入成功！共 ${chapters.length} 章`);
 }
 
 function importEpubFile(filename, content) {
-  // EPUB is complex - for now, show a message
-  toast('EPUB 解析功能开发中，请先使用 TXT 格式');
+ // EPUB is complex - for now, show a message
+ toast('EPUB 解析功能开发中，请先使用 TXT 格式');
 }
 
 function loadLocalChapter(idx) {
-  const shelfItem = state.shelf.find(s => s.id === currentBook.id);
-  const book = shelfItem?._localBook;
-  if (!book) return;
-  const chapter = book.content[idx];
-  if (!chapter) return;
-  currentChapter = idx;
-  const el = document.getElementById('reader-content');
-  el.innerHTML = `<div class="chapter-content" style="font-size:${state.settings.fontSize}px;line-height:${state.settings.lineHeight}">${chapter.content.join('<br><br>')}</div>`;
-  document.getElementById('reader-chapter-name').textContent = chapter.title;
-  updateChapterReadStatus(idx);
+ const shelfItem = state.shelf.find(s => s.id === currentBook.id);
+ const book = shelfItem?._localBook;
+ if (!book) return;
+ const chapter = book.content[idx];
+ if (!chapter) return;
+ currentChapter = idx;
+ const el = document.getElementById('reader-content');
+ el.innerHTML = `<div class="chapter-content" style="font-size:${state.settings.fontSize}px;line-height:${state.settings.lineHeight}">${chapter.content.join('<br><br>')}</div>`;
+ document.getElementById('reader-chapter-name').textContent = chapter.title;
+ updateChapterReadStatus(idx);
 }
 
 // ======= STATS =======
 function checkDaily() {
-  const today = new Date().toISOString().slice(0, 10);
-  if (!state.readStats.daily) state.readStats.daily = {};
-  if (!state.readStats.daily[today]) state.readStats.daily[today] = 0;
-  saveState();
+ const today = new Date().toISOString().slice(0, 10);
+ if (!state.readStats.daily) state.readStats.daily = {};
+ if (!state.readStats.daily[today]) state.readStats.daily[today] = 0;
+ saveState();
 }
 
 function recordReadStat(chars) {
-  const today = new Date().toISOString().slice(0, 10);
-  if (!state.readStats.daily) state.readStats.daily = {};
-  state.readStats.daily[today] = (state.readStats.daily[today] || 0) + chars;
-  state.readStats.totalChars += chars;
-  // Count unique books read
-  if (currentBook) {
-    const bookKey = currentBook.id;
-    if (!state.readStats.books) state.readStats.books = new Set();
-    if (typeof state.readStats.books === 'string') state.readStats.books = new Set([state.readStats.books]);
-    state.readStats.books.add(bookKey);
-    state.readStats.totalBooks = state.readStats.books.size;
-  }
-  saveState();
+ const today = new Date().toISOString().slice(0, 10);
+ if (!state.readStats.daily) state.readStats.daily = {};
+ state.readStats.daily[today] = (state.readStats.daily[today] || 0) + chars;
+ state.readStats.totalChars += chars;
+ // Count unique books read
+ if (currentBook) {
+ const bookKey = currentBook.id;
+ if (!state.readStats.books) state.readStats.books = new Set();
+ if (typeof state.readStats.books === 'string') state.readStats.books = new Set([state.readStats.books]);
+ state.readStats.books.add(bookKey);
+ state.readStats.totalBooks = state.readStats.books.size;
+ }
+ saveState();
 }
 
 function renderStats() {
-  const content = document.getElementById('stats-content');
-  if (!content) return;
-  const stats = state.readStats;
-  const books = typeof stats.books === 'object' && stats.books instanceof Set ? stats.books.size : (parseInt(stats.totalBooks) || 0);
-  const totalChars = stats.totalChars || 0;
-  const totalWords = Math.round(totalChars / 2);
-  const today = new Date().toISOString().slice(0, 10);
-  const todayChars = stats.daily?.[today] || 0;
-  const todayWords = Math.round(todayChars / 2);
-  // Get last 7 days data
-  const last7 = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
-    const chars = stats.daily?.[key] || 0;
-    last7.push(chars);
-  }
-  const max7 = Math.max(...last7, 1);
-  const dayLabels = [];
-  for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    dayLabels.push((d.getMonth()+1) + '/' + d.getDate());
-  }
-  // Calculate streak
-  let streak = 0;
-  const today2 = new Date();
-  for (let i = 0; i < 365; i++) {
-    const d = new Date(today2);
-    d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
-    if ((stats.daily?.[key] || 0) > 0) streak++;
-    else if (i > 0) break;
-  }
-  content.innerHTML = `
-    <div class="stats-row">
-      <div class="stats-card">
-        <div class="stats-num">${books}</div>
-        <div class="stats-label">阅读书籍</div>
-      </div>
-      <div class="stats-card">
-        <div class="stats-num">${streak}</div>
-        <div class="stats-label">连续阅读(天)</div>
-      </div>
-    </div>
-    <div class="stats-row">
-      <div class="stats-card">
-        <div class="stats-num">${formatNum(todayWords)}</div>
-        <div class="stats-label">今日阅读(字)</div>
-      </div>
-      <div class="stats-card">
-        <div class="stats-num">${formatNum(totalWords)}</div>
-        <div class="stats-label">累计阅读(字)</div>
-      </div>
-    </div>
-    <div class="stats-card">
-      <div class="stats-label">近7天阅读趋势</div>
-      <div class="stat-chart">
-        ${last7.map(v => `<div class="stat-bar" style="height:${Math.round((v/max7)*60)}px"></div>`).join('')}
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-secondary)">
-        ${dayLabels.map(d => `<span>${d}</span>`).join('')}
-      </div>
-    </div>
-    <div class="stats-card">
-      <div class="stats-label" style="margin-bottom:8px">最近阅读</div>
-      ${(state.history || []).slice(0, 5).map(h => `
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)" onclick="openHistory('${h.id}')">
-          <span style="font-size:20px">📖</span>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(h.title)}</div>
-            <div style="font-size:11px;color:var(--text-secondary)">${formatTime(h.time)}</div>
-          </div>
-        </div>
-      `).join('') || '<div style="color:var(--text-secondary);font-size:13px">暂无阅读记录</div>'}
-    </div>
-  `;
+ const content = document.getElementById('stats-content');
+ if (!content) return;
+ const stats = state.readStats;
+ const books = typeof stats.books === 'object' && stats.books instanceof Set ? stats.books.size : (parseInt(stats.totalBooks) || 0);
+ const totalChars = stats.totalChars || 0;
+ const totalWords = Math.round(totalChars / 2);
+ const today = new Date().toISOString().slice(0, 10);
+ const todayChars = stats.daily?.[today] || 0;
+ const todayWords = Math.round(todayChars / 2);
+ // Get last 7 days data
+ const last7 = [];
+ for (let i = 6; i >= 0; i--) {
+ const d = new Date();
+ d.setDate(d.getDate() - i);
+ const key = d.toISOString().slice(0, 10);
+ const chars = stats.daily?.[key] || 0;
+ last7.push(chars);
+ }
+ const max7 = Math.max(...last7, 1);
+ const dayLabels = [];
+ for (let i = 6; i >= 0; i--) {
+ const d = new Date();
+ d.setDate(d.getDate() - i);
+ dayLabels.push((d.getMonth()+1) + '/' + d.getDate());
+ }
+ // Calculate streak
+ let streak = 0;
+ const today2 = new Date();
+ for (let i = 0; i < 365; i++) {
+ const d = new Date(today2);
+ d.setDate(d.getDate() - i);
+ const key = d.toISOString().slice(0, 10);
+ if ((stats.daily?.[key] || 0) > 0) streak++;
+ else if (i > 0) break;
+ }
+ content.innerHTML = `
+ <div class="stats-row">
+ <div class="stats-card">
+ <div class="stats-num">${books}</div>
+ <div class="stats-label">阅读书籍</div>
+ </div>
+ <div class="stats-card">
+ <div class="stats-num">${streak}</div>
+ <div class="stats-label">连续阅读(天)</div>
+ </div>
+ </div>
+ <div class="stats-row">
+ <div class="stats-card">
+ <div class="stats-num">${formatNum(todayWords)}</div>
+ <div class="stats-label">今日阅读(字)</div>
+ </div>
+ <div class="stats-card">
+ <div class="stats-num">${formatNum(totalWords)}</div>
+ <div class="stats-label">累计阅读(字)</div>
+ </div>
+ </div>
+ <div class="stats-card">
+ <div class="stats-label">近7天阅读趋势</div>
+ <div class="stat-chart">
+ ${last7.map(v => `<div class="stat-bar" style="height:${Math.round((v/max7)*60)}px"></div>`).join('')}
+ </div>
+ <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-secondary)">
+ ${dayLabels.map(d => `<span>${d}</span>`).join('')}
+ </div>
+ </div>
+ <div class="stats-card">
+ <div class="stats-label" style="margin-bottom:8px">最近阅读</div>
+ ${(state.history || []).slice(0, 5).map(h => `
+ <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)" onclick="openHistory('${h.id}')">
+ <span style="font-size:20px">📖</span>
+ <div style="flex:1;min-width:0">
+ <div style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(h.title)}</div>
+ <div style="font-size:11px;color:var(--text-secondary)">${formatTime(h.time)}</div>
+ </div>
+ </div>
+ `).join('') || '<div style="color:var(--text-secondary);font-size:13px">暂无阅读记录</div>'}
+ </div>
+ `;
 }
 
 function openHistory(bookId) {
-  const book = state.shelf.find(s => s.id === bookId);
-  if (book) openReader(book);
+ const book = state.shelf.find(s => s.id === bookId);
+ if (book) openReader(book);
 }
 
 function formatNum(n) {
-  if (n >= 10000) return (n/10000).toFixed(1) + 'w';
-  if (n >= 1000) return (n/1000).toFixed(1) + 'k';
-  return n;
+ if (n >= 10000) return (n/10000).toFixed(1) + 'w';
+ if (n >= 1000) return (n/1000).toFixed(1) + 'k';
+ return n;
 }
 
 function formatTime(ts) {
-  const d = new Date(ts);
-  const now = new Date();
-  const diff = now - d;
-  if (diff < 60000) return '刚刚';
-  if (diff < 3600000) return Math.floor(diff/60000) + '分钟前';
-  if (diff < 86400000) return Math.floor(diff/3600000) + '小时前';
-  return (d.getMonth()+1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
+ const d = new Date(ts);
+ const now = new Date();
+ const diff = now - d;
+ if (diff < 60000) return '刚刚';
+ if (diff < 3600000) return Math.floor(diff/60000) + '分钟前';
+ if (diff < 86400000) return Math.floor(diff/3600000) + '小时前';
+ return (d.getMonth()+1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2,'0');
 }
 
 // ======= CACHE =======
 function clearCache() {
-  if (confirm('确定清空所有缓存？书架和书源不受影响。')) {
-    // Clear only cache-related data
-    const keys = Object.keys(localStorage).filter(k => k.startsWith('nrp_cache_'));
-    keys.forEach(k => localStorage.removeItem(k));
-    toast('缓存已清空');
-  }
+ if (confirm('确定清空所有缓存？书架和书源不受影响。')) {
+ // Clear only cache-related data
+ const keys = Object.keys(localStorage).filter(k => k.startsWith('nrp_cache_'));
+ keys.forEach(k => localStorage.removeItem(k));
+ toast('缓存已清空');
+ }
 }
 
 // ======= UTILS =======
 function escapeHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+ if (!str) return '';
+ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function escapeAttr(str) {
-  if (!str) return '';
-  return JSON.stringify(str).slice(1, -1);
+ if (!str) return '';
+ return JSON.stringify(str).slice(1, -1);
 }
 
 function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+ const t = document.getElementById('toast');
+ t.textContent = msg;
+ t.classList.add('show');
+ setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 // ======= KEYBOARD SHORTCUTS =======
 document.addEventListener('keydown', e => {
-  if (!document.getElementById('reader-view').classList.contains('active')) return;
-  if (e.key === 'Escape') closeReader();
-  if (e.key === 'ArrowLeft') prevChapter();
-  if (e.key === 'ArrowRight') nextChapter();
-  if (e.key === ' ') { e.preventDefault(); }
+ if (!document.getElementById('reader-view').classList.contains('active')) return;
+ if (e.key === 'Escape') closeReader();
+ if (e.key === 'ArrowLeft') prevChapter();
+ if (e.key === 'ArrowRight') nextChapter();
+ if (e.key === ' ') { e.preventDefault(); }
 });
 
 // ======= SERVICE WORKER =======
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {
-      // SW not available (running from file:// or no HTTPS)
-    });
-  });
+ window.addEventListener('load', () => {
+ navigator.serviceWorker.register('sw.js').catch(() => {
+ // SW not available (running from file:// or no HTTPS)
+ });
+ });
 }
 
 // ======= PWA INSTALL PROMPT =======
 let deferredPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
-  deferredPrompt = e;
+ deferredPrompt = e;
 });
 </script>
 </body>
