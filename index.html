@@ -707,7 +707,12 @@
 
 <script>
 // ======= CONSTANTS & STATE =======
-const PROXY = 'https://api.codetabs.com/v1/proxy?quest=';
+const PROXY_LIST = [
+ 'https://api.codetabs.com/v1/proxy?quest=',
+ 'https://corsproxy.io/?',
+ 'https://api.allorigins.win/raw?url=',
+];
+const PROXY = PROXY_LIST[0];
 const STORE_KEY = 'novelReaderPro_v1';
 let state = loadState();
 let searchResults = [];
@@ -935,16 +940,31 @@ function looksLikeGarbled(str) {
  return validChars.length / str.length < 0.3;
 }
 async function fetchTextWithProxy(url) {
+ for (let i = 0; i < PROXY_LIST.length; i++) {
  try {
- const proxyUrl = PROXY + encodeURIComponent(url);
- const res = await fetch(proxyUrl, { timeout: 15000 });
+ let proxyUrl;
+ const p = PROXY_LIST[i];
+ // Different proxy APIs have different URL formats
+ if (p.includes('codetabs')) {
+ proxyUrl = p + encodeURIComponent(url);
+ } else if (p.includes('corsproxy.io')) {
+ proxyUrl = p + encodeURIComponent(url);
+ } else if (p.includes('allorigins')) {
+ proxyUrl = p + encodeURIComponent(url);
+ } else {
+ proxyUrl = p + encodeURIComponent(url);
+ }
+ const res = await fetch(proxyUrl, { timeout: 20000 });
+ if (!res.ok) continue;
  const bytes = new Uint8Array(await res.arrayBuffer());
- // Try UTF-8 first
- const text = new TextDecoder('utf-8').decode(bytes);
- // Check if proxy returned an error message
- if (text.includes('"Error"') || text.includes('not a valid resource') || text.includes('is not valid')) {
- console.error('CORS proxy error for', url, ':', text.substring(0, 200));
- return { error: 'CORS_PROXY_BLOCKED', message: '该网站被代理阻止，请尝试其他书源', original: text };
+ // allorigins wraps response in {contents: ...}
+ let text = new TextDecoder('utf-8').decode(bytes);
+ // Try to unwrap allorigins format
+ try { const j = JSON.parse(text); if (j.contents) text = j.contents; } catch(e) {}
+ // Check if proxy returned an error
+ if (text.includes('"Error"') || text.includes('not a valid resource') || text.includes('is not valid') || text.length < 50) {
+ console.warn('Proxy', i, 'failed for', url);
+ continue;
  }
  if (looksLikeGarbled(text)) {
  const gbText = new TextDecoder('gbk').decode(bytes);
@@ -953,9 +973,11 @@ async function fetchTextWithProxy(url) {
  }
  return text;
  } catch(e) { 
- console.error('fetchTextWithProxy error:', e);
- return { error: 'FETCH_FAILED', message: '网络请求失败: ' + (e.message || '未知错误') };
+ console.warn('Proxy', i, 'error:', e.message);
+ continue;
  }
+ }
+ return { error: 'ALL_PROXIES_FAILED', message: '所有代理都无法访问该网站，请尝试其他书源' };
 }
 
 // ======= SEARCH =======
